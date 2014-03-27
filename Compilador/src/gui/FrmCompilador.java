@@ -13,17 +13,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -32,8 +31,16 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-public class FrmCompilador extends JFrame {
+/**
+ * @author Ailsson L. Hafemann
+ * @author Fredy Schlag
+ * @author Paulo Weber
+ */
+
+public class FrmCompilador extends JFrame {	
 	
 	private String				nomeArquivo	= "";
 	private JTextArea			taEditor;
@@ -53,11 +60,10 @@ public class FrmCompilador extends JFrame {
 	private JButton				btEquipe;
 	private JPanel				paEditor;
 	private JScrollPane			spEditor;
-	private ArrayList<String>	mensagens;
 	
 	public FrmCompilador() {
 		initialize();
-		mensagens = new ArrayList<>();
+		novo();
 	}
 	
 	/**
@@ -66,8 +72,8 @@ public class FrmCompilador extends JFrame {
 	@SuppressWarnings("serial")
 	private void initialize() {
 		setTitle("Compilador - 2014/I");
-		setMinimumSize(new Dimension(945, 310));
-		setBounds(100, 100, 945, 450);
+		setMinimumSize(new Dimension(990, 315));
+		setBounds(100, 100, 990, 450);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
@@ -168,8 +174,7 @@ public class FrmCompilador extends JFrame {
 		paBotoes.setActionMap(acoes);
 		InputMap atalhos = paBotoes.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
 		atalhos.put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), "btNovo");
-		// o Ctrl A deve sobrescrever o tratamento do JTextArea (Selecionar
-		// tudo)
+		// o Ctrl A deve sobrescrever o tratamento do JTextArea (Selecionar tudo)
 		atalhos.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK), "btAbrir");
 		atalhos.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "btSalvar");
 		
@@ -177,54 +182,54 @@ public class FrmCompilador extends JFrame {
 		atalhos.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), "btCopiar");
 		atalhos.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), "btColar");
 		atalhos.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "btRecortar");
+		// end
 		atalhos.put(KeyStroke.getKeyStroke("F8"), "btCompilar");
 		atalhos.put(KeyStroke.getKeyStroke("F9"), "btGerarCodigo");
 		atalhos.put(KeyStroke.getKeyStroke("F1"), "btEquipe");
-		// end
-		
+				
 		btNovo = new JButton("novo [ctrl-n]");
 		btNovo.addActionListener(acNovo);
-		defineBotao(btNovo);
+		defineBotao(btNovo, 95, "novo.png");
 		paBotoes.add(btNovo);
 		
 		btAbrir = new JButton("abrir [ctrl-a]");
 		btAbrir.addActionListener(acAbrir);
-		defineBotao(btAbrir);
+		defineBotao(btAbrir, 95, "abrir.png");
 		paBotoes.add(btAbrir);
 		
 		btSalvar = new JButton("salvar [ctrl-s]");
 		btSalvar.addActionListener(acSalvar);
-		defineBotao(btSalvar);
+		defineBotao(btSalvar, 100, "salvar.png");
 		paBotoes.add(btSalvar);
 		
 		btCopiar = new JButton("copiar [ctrl-c]");
 		btCopiar.addActionListener(acCopiar);
-		defineBotao(btCopiar);
+		defineBotao(btCopiar, 100, "copiar.png");
 		paBotoes.add(btCopiar);
 		
 		btColar = new JButton("colar [ctrl-v]");
 		btColar.addActionListener(acColar);
-		defineBotao(btColar);
+		defineBotao(btColar, 95, "colar.png");
 		paBotoes.add(btColar);
 		
 		btRecortar = new JButton("recortar [ctrl-x]");
 		btRecortar.addActionListener(acRecortar);
-		defineBotao(btRecortar);
+		defineBotao(btRecortar, 115, "recortar.png");
 		paBotoes.add(btRecortar);
 		
 		btCompilar = new JButton("compilar [F8]");
 		btCompilar.addActionListener(acCompilar);
-		defineBotao(btCompilar);
+		defineBotao(btCompilar, 100, "compilar.png");
 		paBotoes.add(btCompilar);
 		
 		btGerarCodigo = new JButton("gerar c\u00F3digo [F9]");
 		btGerarCodigo.addActionListener(acGerarCodigo);
-		defineBotao(btGerarCodigo);
+		defineBotao(btGerarCodigo, 120, "gerarcodigo.png");
 		paBotoes.add(btGerarCodigo);
 		
 		btEquipe = new JButton("equipe [F1]");
 		btEquipe.addActionListener(acEquipe);
-		defineBotao(btEquipe);
+		defineBotao(btEquipe, 100, "equipe.png");
 		paBotoes.add(btEquipe);
 		
 		paEditor = new JPanel();
@@ -238,7 +243,24 @@ public class FrmCompilador extends JFrame {
 		
 		taEditor = new JTextArea();
 		taEditor.setBorder(new NumberedBorder());
-		taEditor.getInputMap(JPanel.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK), "none");
+		taEditor.getInputMap(JPanel.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK), "none");		
+		taEditor.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				atualizaStatusBar(true);				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				atualizaStatusBar(true);				
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				atualizaStatusBar(true);				
+			}
+		});		
 		spEditor.setViewportView(taEditor);
 		
 		spMensagens = new JScrollPane();
@@ -267,17 +289,20 @@ public class FrmCompilador extends JFrame {
 		paEsqStatusBar.setPreferredSize(new Dimension(5, 10));
 		paStatusBar.add(paEsqStatusBar, BorderLayout.WEST);
 	}
-	
-	private void defineBotao(final JButton botao) {
+
+	private void defineBotao(JButton botao, int largura, String img) {
 		botao.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		botao.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 0, 0)));
-		botao.setPreferredSize(new Dimension(95, 30));
-		botao.setMaximumSize(new Dimension(95, 30));
+		botao.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		botao.setPreferredSize(new Dimension(largura, 40));
+		botao.setIcon(new ImageIcon("src/gui/ico/" + img));
+		botao.setMaximumSize(new Dimension(120, 40));
 	}
 	
 	private void novo() {
 		taEditor.setText("");
+		taMensagens.setText("");
 		nomeArquivo = "";
+		atualizaStatusBar(false);
 	}
 	
 	private void abrir() throws IOException {
@@ -295,6 +320,8 @@ public class FrmCompilador extends JFrame {
 					sb.append(System.getProperty("line.separator"));
 				}
 				taEditor.setText(sb.toString());
+				taMensagens.setText("");
+				atualizaStatusBar(false);
 			} finally {
 				br.close();
 			}
@@ -313,6 +340,8 @@ public class FrmCompilador extends JFrame {
 		BufferedWriter br = new BufferedWriter(new FileWriter(file));
 		try {
 			br.write(taEditor.getText());
+			taMensagens.setText("");
+			atualizaStatusBar(false);
 		} finally {
 			br.close();
 		}
@@ -331,34 +360,24 @@ public class FrmCompilador extends JFrame {
 	}
 	
 	private void compilar() {
-		adicionaMensagem("compilação de programas ainda não foi implementada");
+		adicionarMensagem("compilação de programas ainda não foi implementada");
 	}
 	
 	private void gerarCodigo() {
-		adicionaMensagem("geração de código ainda não foi implementada");
-	}
-	
-	private void adicionaMensagem(final String novaMensagem) {
-		ArrayList<String> novaListaMensagens = new ArrayList<>();
-		int i = 0;
-		String mensagem;
-		novaListaMensagens.add(novaMensagem);
-		while ((i < 5) && (i < mensagens.size())) {
-			mensagem = mensagens.get(i);
-			novaListaMensagens.add(mensagem);
-			i++;
-		}
-		mensagens = novaListaMensagens;
-		taMensagens.setEditable(true);
-		try {
-			taMensagens.setText(mensagens.toString());
-		} finally {
-			taMensagens.setEditable(false);
-		}
-	}
+		adicionarMensagem("geração de código ainda não foi implementada");
+	}	
 	
 	private void equipe() {
-		JOptionPane.showMessageDialog(this, "Equipe: Fredy Schlag \n" + "        Jonathan Souza \n" + "        Paulo Weber");
+		adicionarMensagem("Equipe: Ailsson L. Hafemann, Fredy Schlag, Paulo Weber");
 	}
+	
+	private void adicionarMensagem(String mensagem) {			
+		taMensagens.insert(mensagem + "\n", 0);
+		taMensagens.setCaretPosition(0); //posiciona na primeira linha
+	}
+	
+	private void atualizaStatusBar(boolean modificado) {
+		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Não modificado"));		
+	}	
 	
 }
