@@ -294,7 +294,7 @@ public class FrmCompilador extends JFrame {
 		botao.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		botao.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		botao.setPreferredSize(new Dimension(largura, 40));
-		botao.setIcon(new ImageIcon("src/gui/ico/" + img));
+		botao.setIcon(new ImageIcon(getClass().getResource("ico/" + img))); // pega img de dentro do jar		
 		botao.setMaximumSize(new Dimension(120, 40));
 	}
 	
