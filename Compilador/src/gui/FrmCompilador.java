@@ -34,6 +34,10 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import lexico.LexicalError;
+import lexico.Lexico;
+import lexico.Token;
+
 /**
  * @author Ailsson L. Hafemann
  * @author Fredy Schlag
@@ -360,9 +364,26 @@ public class FrmCompilador extends JFrame {
 	}
 	
 	private void compilar() {
-		adicionarMensagem("compilação de programas ainda não foi implementada");
+		Lexico lexico = new Lexico();
+		lexico.setInput(taEditor.getText());
+		try {
+		    Token t = null;
+		    System.out.println("linha	classe			lexema");
+		    while ( (t = lexico.nextToken()) != null )
+		    {
+		        System.out.println(newline(t));
+		    }
+		}
+		catch ( LexicalError e ) {
+		    e.printStackTrace();
+		}
 	}
 	
+	private String newline(Token t) {
+		return String.valueOf(t.getPosition()) + "\t" + //TODO: não pode ser o position, tem que ser a linha 
+			String.valueOf(t.getId()) + "\t" + String.valueOf(t.getLexeme());
+	}
+
 	private void gerarCodigo() {
 		adicionarMensagem("geração de código ainda não foi implementada");
 	}	
