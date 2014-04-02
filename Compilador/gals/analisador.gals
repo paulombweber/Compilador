@@ -1,0 +1,45 @@
+#Options
+GenerateScanner = true
+GenerateParser = false
+Language = Java
+ScannerName = Lexico
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = Stream
+#RegularDefinitions
+letra: [a-zA-Z]
+digito: [0-9]
+digito2: [1-9]
+aspas: \" 
+barra: "/"
+chaveabre: "{"
+chavefecha: "}"
+comentariolinha: {barra}{barra}([^\n])*
+comentariobloco: {chaveabre}[^}]*{chavefecha}
+#Tokens
+  // a) identificador
+  identificador : ({letra} | (_{letra})) ({letra} | {digito} | (_{letra}))*
+
+  //b) constante integer
+  constantei: 0 | ({digito2} {digito}? {digito}? {digito}? {digito}?)
+  
+  //c) constante float
+  constantef: (0 | ({digito2} {digito}? {digito}? {digito}? {digito}?)) , (0 | ({digito}? {digito}? {digito}? {digito}?) {digito2})
+  
+  // d) constante string
+  constantes: {aspas} ([^\"\\\n] | \\ (\\ | \"))* {aspas}
+
+  // comentarios: de linha e de bloco - ignorados
+  // e) comentário de linha
+  :!{comentariolinha}
+  // f) comentário de bloco
+  :!{comentariobloco}
+  
+  // simbolos especiais
+  "+"
+  "-"
+  "*"
+  "/"
+
+  //caracteres de formatacao - ignorados
+  :[\t\s\n]  
