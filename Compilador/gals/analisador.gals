@@ -15,7 +15,7 @@ barra: "/"
 chaveAbre: "{"
 chaveFecha: "}"
 comentarioLinha: {barra}{barra}([^\n])*
-comentarioBloco: {chaveabre}[^}]*{chavefecha}
+comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 #Tokens
   // a) identificador
   identificador : ({letra} | (_{letra})) ({letra} | {digito} | (_{letra}))*
