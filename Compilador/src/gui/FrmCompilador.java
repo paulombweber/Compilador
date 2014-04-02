@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -364,18 +365,24 @@ public class FrmCompilador extends JFrame {
 	}
 	
 	private void compilar() {
+		taMensagens.setText("");
 		Lexico lexico = new Lexico();
 		lexico.setInput(taEditor.getText());
+		ArrayList<String> list = new ArrayList<>();
 		try {
 		    Token t = null;
-		    System.out.println("linha	classe			lexema");
+		    list.add("linha\tclasse\tlexema");
 		    while ( (t = lexico.nextToken()) != null )
 		    {
-		        System.out.println(newline(t));
+		    	list.add(newline(t));
 		    }
+		    for(String line: list){
+		    	imprimirMensagem(line);
+		    }
+		    imprimirMensagem("programa compilado com sucesso");
 		}
 		catch ( LexicalError e ) {
-		    e.printStackTrace();
+		    imprimirMensagem(e.getMessage());
 		}
 	}
 	
@@ -385,16 +392,16 @@ public class FrmCompilador extends JFrame {
 	}
 
 	private void gerarCodigo() {
-		adicionarMensagem("geração de código ainda não foi implementada");
+		imprimirMensagem("geração de código ainda não foi implementada");
 	}	
 	
 	private void equipe() {
-		adicionarMensagem("Equipe: Ailsson L. Hafemann, Fredy Schlag, Paulo Weber");
+		imprimirMensagem("Equipe: Ailsson L. Hafemann, Fredy Schlag, Paulo Weber");
 	}
 	
-	private void adicionarMensagem(String mensagem) {			
-		taMensagens.insert(mensagem + "\n", 0);
-		taMensagens.setCaretPosition(0); //posiciona na primeira linha
+	private void imprimirMensagem(String mensagem) {			
+		taMensagens.insert(mensagem + "\n", taMensagens.getCaretPosition());
+		//taMensagens.setCaretPosition(0); //posiciona na primeira linha
 	}
 	
 	private void atualizaStatusBar(boolean modificado) {
