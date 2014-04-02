@@ -35,6 +35,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import lexico.Classes;
 import lexico.LexicalError;
 import lexico.Lexico;
 import lexico.Token;
@@ -388,7 +389,7 @@ public class FrmCompilador extends JFrame {
 	
 	private String newline(Token t) {
 		return String.valueOf(t.getPosition()) + "\t" + //TODO: não pode ser o position, tem que ser a linha 
-			String.valueOf(t.getId()) + "\t" + String.valueOf(t.getLexeme());
+			Classes.get(t.getId()) + "\t" + String.valueOf(t.getLexeme());
 	}
 
 	private void gerarCodigo() {
