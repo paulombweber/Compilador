@@ -370,9 +370,9 @@ public class FrmCompilador extends JFrame {
 		Lexico lexico = new Lexico();
 		lexico.setInput(taEditor.getText());
 		ArrayList<String> list = new ArrayList<>();
+		Token t = null;
 		try {
-		    Token t = null;
-		    list.add("linha\tclasse\tlexema");
+		    list.add("linha\tclasse\t\tlexema");
 		    while ( (t = lexico.nextToken()) != null )
 		    {
 		    	list.add(newline(t));
@@ -383,17 +383,17 @@ public class FrmCompilador extends JFrame {
 		    imprimirMensagem("programa compilado com sucesso");
 		}
 		catch ( LexicalError e ) {
-		    imprimirMensagem(e.getMessage());
+		    imprimirMensagem(taEditor.getText().charAt(lexico.getPosition()-1) + e.getMessage());
 		}
 	}
 	
 	private String newline(Token t) {
-		return String.valueOf(t.getPosition()) + "\t" + //TODO: não pode ser o position, tem que ser a linha 
+		return String.valueOf(t.getPosition()) + "\t" + //TODO: nï¿½o pode ser o position, tem que ser a linha 
 			Classes.get(t.getId()) + "\t" + String.valueOf(t.getLexeme());
 	}
 
 	private void gerarCodigo() {
-		imprimirMensagem("geração de código ainda não foi implementada");
+		imprimirMensagem("geraï¿½ï¿½o de cï¿½digo ainda nï¿½o foi implementada");
 	}	
 	
 	private void equipe() {
@@ -406,7 +406,7 @@ public class FrmCompilador extends JFrame {
 	}
 	
 	private void atualizaStatusBar(boolean modificado) {
-		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Não modificado"));		
+		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Nï¿½o modificado"));		
 	}	
 	
 }

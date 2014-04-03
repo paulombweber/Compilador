@@ -109,4 +109,8 @@ public class Lexico implements Constants
         else
             return (char) -1;
     }
+    
+    public int getPosition(){
+    	return position;
+    }
 }

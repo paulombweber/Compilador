@@ -64,10 +64,10 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Caractere n�o esperado",
+        "Simbolo inválido",
         "",
         "",
-        "Erro identificando constanteString",
+        "Era esperado \"",
         "Erro identificando \"&&\"",
         "",
         "",
@@ -84,11 +84,11 @@ public interface ScannerConstants
         "",
         "",
         "Erro identificando identificador",
-        "Erro identificando <ignorar>",
+        "Comentario de bloco não finalizado",
         "Erro identificando \"||\"",
         "",
         "",
-        "Erro identificando constanteString",
+        "Simbolo invalido",
         "",
         "",
         "Erro identificando constanteFloat",
