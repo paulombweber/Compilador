@@ -1,20 +1,48 @@
 package lexico;
 
+import java.util.Stack;
+
 public class Lexico implements Constants
 {
-    private int position;
+    private int position; // sempre será a próxima posição
+    private int line;
+    private int column;
+    private Stack<Integer> endColumnsLinePostion; // guarda o número da ultima coluna de cada linha
     private String input;
+    
+    public Lexico() {
+    	endColumnsLinePostion = new Stack<Integer>();
+    }
 
     public void setInput(String input)
     {
         this.input = input;
-        setPosition(0);
+        position = 0;
+        line = 1;
+        column = 1;        
+    }    
+    
+    public void setPosition(int newPosition) {
+    	if (newPosition == position) {
+    		input.charAt(position - 1);
+    	} else if (newPosition > position) {
+    		int count = newPosition - position;
+    		
+    		for (int i = 0; i < count; i++) {
+    			nextChar();
+    		}
+    	} else {
+    		int count = position - newPosition;
+    		
+    		for (int i = 0; i < count; i++) {
+    			previousChar();
+    		}
+    	}
     }
-
-    public void setPosition(int pos)
-    {
-        position = pos;
-    }
+    
+    public int getPosition(){
+    	return position;
+    }    
 
     public Token nextToken() throws LexicalError
     {
@@ -22,6 +50,7 @@ public class Lexico implements Constants
             return null;
 
         int start = position;
+        int startColumn = column;
 
         int state = 0;
         int lastState = 0;
@@ -35,20 +64,19 @@ public class Lexico implements Constants
 
             if (state < 0)
                 break;
-
             else
             {
                 if (tokenForState(state) >= 0)
                 {
                     endState = state;
-                    end = position;
+                    end = position;            
                 }
             }
         }
         if (endState < 0 || (endState != state && tokenForState(lastState) == -2))
             throw new LexicalError(SCANNER_ERROR[lastState], start);
 
-        position = end;
+        setPosition(end);
 
         int token = tokenForState(endState);
 
@@ -57,11 +85,11 @@ public class Lexico implements Constants
         else
         {
             String lexeme = input.substring(start, end);
-            token = lookupToken(token, lexeme);
-            return new Token(token, lexeme, start);
+            token = lookupToken(token, lexeme);            
+            return new Token(token, lexeme, line, startColumn, position);
         }
     }
-
+    
     private int nextState(char c, int state)
     {
         int next = SCANNER_TABLE[state][c];
@@ -100,17 +128,41 @@ public class Lexico implements Constants
     private boolean hasInput()
     {
         return position < input.length();
-    }
-
-    private char nextChar()
-    {
-        if (hasInput())
-            return input.charAt(position++);
-        else
-            return (char) -1;
+    }      
+    
+    private char previousChar() {
+    	if (position > 0) {
+    		if (column == 1) {
+    			line--;
+    			column = endColumnsLinePostion.pop();
+    		} else {
+    			column--;
+    		}
+    		
+    		position--;
+    		return input.charAt(position - 1);
+    	} else {
+    		return (char) -1;
+    	}
     }
     
-    public int getPosition(){
-    	return position;
+    private char nextChar()
+    {
+        if (hasInput()) {
+        	char c = input.charAt(position);
+        	
+    		if (c == '\n') {
+    			line++;
+    			endColumnsLinePostion.push(column);
+    			column = 1;
+    		} else {
+    			column++;
+    		}
+        	
+    		position++;
+        	return c;        	
+        }
+        else
+            return (char) -1;
     }
 }

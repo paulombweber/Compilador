@@ -375,6 +375,7 @@ public class FrmCompilador extends JFrame {
 		    list.add("linha\tclasse\t\tlexema");
 		    while ( (t = lexico.nextToken()) != null )
 		    {
+		    	System.out.println(t);
 		    	list.add(newline(t));
 		    }
 		    for(String line: list){
@@ -388,12 +389,12 @@ public class FrmCompilador extends JFrame {
 	}
 	
 	private String newline(Token t) {
-		return String.valueOf(t.getPosition()) + "\t" + //TODO: nï¿½o pode ser o position, tem que ser a linha 
+		return String.valueOf(t.getLine()) + "\t" + 
 			Classes.get(t.getId()) + "\t" + String.valueOf(t.getLexeme());
 	}
 
 	private void gerarCodigo() {
-		imprimirMensagem("geraï¿½ï¿½o de cï¿½digo ainda nï¿½o foi implementada");
+		imprimirMensagem("Geração de código ainda não foi implementado");
 	}	
 	
 	private void equipe() {
@@ -406,7 +407,7 @@ public class FrmCompilador extends JFrame {
 	}
 	
 	private void atualizaStatusBar(boolean modificado) {
-		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Nï¿½o modificado"));		
+		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Não modificado"));		
 	}	
 	
 }
