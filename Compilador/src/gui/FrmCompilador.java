@@ -248,6 +248,7 @@ public class FrmCompilador extends JFrame {
 		paEditor.add(spEditor, BorderLayout.CENTER);
 		
 		taEditor = new JTextArea();
+		taEditor.setFont(new Font("Consolas", Font.PLAIN, 12));
 		taEditor.setBorder(new NumberedBorder());
 		taEditor.getInputMap(JPanel.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK), "none");		
 		taEditor.getDocument().addDocumentListener(new DocumentListener() {
@@ -276,6 +277,7 @@ public class FrmCompilador extends JFrame {
 		paEditor.add(spMensagens, BorderLayout.SOUTH);
 		
 		taMensagens = new JTextArea();
+		taMensagens.setFont(new Font("Consolas", Font.PLAIN, 12));
 		taMensagens.setEditable(false);
 		taMensagens.getInputMap(JPanel.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK), "none");
 		spMensagens.setViewportView(taMensagens);
@@ -372,7 +374,7 @@ public class FrmCompilador extends JFrame {
 		ArrayList<String> list = new ArrayList<>();
 		Token t = null;
 		try {
-		    list.add("linha\tclasse\t\tlexema");
+		    list.add("linha	classe		      lexema");
 		    while ( (t = lexico.nextToken()) != null )
 		    {
 		    	System.out.println(t);
@@ -388,9 +390,24 @@ public class FrmCompilador extends JFrame {
 		}
 	}
 	
+	private String formatToken(Token t) {
+		String str = String.valueOf(t.getLine()).concat("  ");		
+		
+		for (int i = str.length(); i < 8; i++) { // 6 colunas para número da linha
+			str = str.concat(" ");
+		}
+		
+		str = str.concat(Classes.get(t.getId())).concat("  ");
+		
+		for (int i = str.length(); i < 30; i++) { // 26 colunas para classe
+			str = str.concat(" "); 
+		}
+		
+		return str.concat(t.getLexeme());		
+	}
+	
 	private String newline(Token t) {
-		return String.valueOf(t.getLine()) + "\t" + 
-			Classes.get(t.getId()) + "\t" + String.valueOf(t.getLexeme());
+		return formatToken(t);
 	}
 
 	private void gerarCodigo() {
