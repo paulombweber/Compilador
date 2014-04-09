@@ -374,12 +374,12 @@ public class FrmCompilador extends JFrame {
 		ArrayList<String> list = new ArrayList<>();
 		Token t = null;
 		try {
-		    list.add("linha	classe		      lexema");
+		    list.add(formatMessage("linha", "classe", "lexema"));
 		    while ( (t = lexico.nextToken()) != null )
 		    {
-		    	System.out.println(t);
 		    	list.add(newline(t));
 		    }
+		    
 		    for(String line: list){
 		    	imprimirMensagem(line);
 		    }
@@ -390,24 +390,26 @@ public class FrmCompilador extends JFrame {
 		}
 	}
 	
-	private String formatToken(Token t) {
-		String str = String.valueOf(t.getLine()).concat("  ");		
+	private String formatMessage(String line, String clazz, String lexeme) {
+		StringBuilder builder = new StringBuilder(line);
+		builder.append("  ");		
 		
-		for (int i = str.length(); i < 8; i++) { // 6 colunas para número da linha
-			str = str.concat(" ");
+		for (int i = builder.length(); i < 8; i++) { // 6 colunas para número da linha
+			builder.append(" ");
 		}
 		
-		str = str.concat(Classes.get(t.getId())).concat("  ");
+		builder.append(clazz).append("  ");
 		
-		for (int i = str.length(); i < 30; i++) { // 26 colunas para classe
-			str = str.concat(" "); 
+		for (int i = builder.length(); i < 30; i++) { // 26 colunas para classe
+			builder.append(" "); 
 		}
 		
-		return str.concat(t.getLexeme());		
+		builder.append(lexeme);
+		return builder.toString();		
 	}
 	
 	private String newline(Token t) {
-		return formatToken(t);
+		return formatMessage(String.valueOf(t.getLine()), Classes.get(t.getId()), t.getLexeme());
 	}
 
 	private void gerarCodigo() {

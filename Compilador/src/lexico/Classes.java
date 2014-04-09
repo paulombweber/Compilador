@@ -9,10 +9,10 @@ public enum Classes {
 	
 	private static String[] values = new String[]{
 	"EPSILON", "DOLLAR", "identificador   ", "constanteInteger", "constanteFloat", "constanteString",
-	"sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial",
-	"sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial",
-	"sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial",
-	"sï¿½mbolo especial", "sï¿½mbolo especial", "sï¿½mbolo especial",
+	"símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial",
+	"símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial",
+	"símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial",
+	"símbolo especial", "símbolo especial", "símbolo especial",
 	"palavra reservada", "palavra reservada", "palavra reservada", "palavra reservada", "palavra reservada",
 	"palavra reservada", "palavra reservada", "palavra reservada", "palavra reservada", "palavra reservada",
 	"palavra reservada", "palavra reservada", "palavra reservada", "palavra reservada", "palavra reservada", "palavra reservada"};
