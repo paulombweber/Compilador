@@ -386,7 +386,12 @@ public class FrmCompilador extends JFrame {
 		    imprimirMensagem("programa compilado com sucesso");
 		}
 		catch ( LexicalError e ) {
-		    imprimirMensagem(taEditor.getText().charAt(lexico.getPosition()-1) + e.getMessage());
+			String mensagem = "";
+			mensagem = e.getMessage();
+			if(e.getPosition() == 0){
+				mensagem += taEditor.getText().charAt(lexico.getPosition()-1);
+			}
+		    imprimirMensagem(mensagem);
 		}
 	}
 	
@@ -394,7 +399,7 @@ public class FrmCompilador extends JFrame {
 		StringBuilder builder = new StringBuilder(line);
 		builder.append("  ");		
 		
-		for (int i = builder.length(); i < 8; i++) { // 6 colunas para número da linha
+		for (int i = builder.length(); i < 8; i++) { // 6 colunas para nï¿½mero da linha
 			builder.append(" ");
 		}
 		
@@ -413,7 +418,7 @@ public class FrmCompilador extends JFrame {
 	}
 
 	private void gerarCodigo() {
-		imprimirMensagem("Geração de código ainda não foi implementado");
+		imprimirMensagem("Geraï¿½ï¿½o de cï¿½digo ainda nï¿½o foi implementado");
 	}	
 	
 	private void equipe() {
@@ -426,7 +431,7 @@ public class FrmCompilador extends JFrame {
 	}
 	
 	private void atualizaStatusBar(boolean modificado) {
-		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Não modificado"));		
+		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Nï¿½o modificado"));		
 	}	
 	
 }
