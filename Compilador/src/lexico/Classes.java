@@ -8,7 +8,7 @@ public enum Classes {
 	}
 	
 	private static String[] values = new String[]{
-	"EPSILON", "DOLLAR", "identificador   ", "constanteInteger", "constanteFloat", "constanteString",
+	"EPSILON", "DOLLAR", "identificador", "constante integer", "constante float", "constante string",
 	"símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial",
 	"símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial",
 	"símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial", "símbolo especial",
