@@ -1,0 +1,77 @@
+#Options
+GenerateScanner = true
+GenerateParser = false
+Language = Java
+ScannerName = Lexico
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = Stream
+#RegularDefinitions
+letra: [a-zA-Z]
+digito: [0-9]
+digito2: [1-9]
+aspas: \" 
+barra: "/"
+chaveAbre: "{"
+chaveFecha: "}"
+comentarioLinha: {barra}{barra}([^\n])*
+comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
+#Tokens
+  // a) identificador
+  identificador : ({letra} | (_{letra})) ({letra} | {digito} | (_{letra}))*
+
+  //b) constante integer
+  constanteInteger: 0 | ({digito2} {digito}? {digito}? {digito}? {digito}?)
+  
+  //c) constante float
+  constanteFloat: (0 | ({digito2} {digito}? {digito}? {digito}? {digito}?)) , (0 | ({digito}? {digito}? {digito}? {digito}?) {digito2})
+  
+  // d) constante string
+  constanteString: {aspas} ([^\"\\\n] | \\ (\\ | \"))* {aspas}
+
+  // comentarios: de linha e de bloco - ignorados
+  // e) comentário de linha
+  :!{comentarioLinha}
+  // f) comentário de bloco
+  :!{comentarioBloco}
+
+  //caracteres de formatacao - ignorados
+  :[\t\s\n]  
+  
+  // simbolos especiais
+  "+"
+  "-"
+  "*"
+  "/"
+  "=" 
+  "&&"
+  "||"
+  "!"
+  "=="
+  "!="
+  "<"
+  "<="
+  ">"
+  ">="
+  ","
+  ";"
+  "("
+  ")"
+
+  //palavras reservadas
+  pr_boolean = identificador : "boolean"
+  pr_do = identificador : "do"
+  pr_else = identificador : "else"
+  pr_end = identificador : "end"
+  pr_false = identificador : "false"
+  pr_float = identificador : "float"
+  pr_if = identificador : "if"
+  pr_integer = identificador : "integer"
+  pr_main = identificador : "main"
+  pr_print = identificador : "print"
+  pr_println = identificador : "println"
+  pr_scan = identificador : "scan"
+  pr_string = identificador : "string"
+  pr_true = identificador : "true"
+  pr_void = identificador : "void"
+  pr_while = identificador : "while"
