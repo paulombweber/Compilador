@@ -4,10 +4,10 @@ import java.util.Stack;
 
 public class Lexico implements Constants
 {
-    private int position; // sempre serï¿½ a prï¿½xima posiï¿½ï¿½o
+    private int position; // sempre será a próxima posição
     private int line;
     private int column;
-    private Stack<Integer> endColumnsLinePostion; // guarda o nï¿½mero da ultima coluna de cada linha
+    private Stack<Integer> endColumnsLinePostion; // guarda o número da ultima coluna de cada linha
     private String input;
     
     public Lexico() {

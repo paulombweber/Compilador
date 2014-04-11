@@ -64,7 +64,7 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Sï¿½mbolo invï¿½lido",
+        "Símbolo inválido",
         "",
         "",
         "Era esperado \"",
@@ -84,7 +84,7 @@ public interface ScannerConstants
         "",
         "",
         "Era esperado uma letra",
-        "Comentario de bloco nï¿½o foi finalizado",
+        "Comentário de bloco não foi finalizado",
         "Era esperado |",
         "",
         "",
