@@ -67,7 +67,7 @@ public interface ScannerConstants
         "Símbolo inválido",
         "",
         "",
-        "Era esperado \"",
+        "Constante literal não finalizada",
         "Era esperado &",
         "",
         "",

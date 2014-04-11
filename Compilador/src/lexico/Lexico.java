@@ -51,6 +51,7 @@ public class Lexico implements Constants
 
         int start = position;
         int startColumn = column;
+        int startLine = line;
 
         int state = 0;
         int lastState = 0;
@@ -74,7 +75,7 @@ public class Lexico implements Constants
             }
         }
         if (endState < 0 || (endState != state && tokenForState(lastState) == -2))
-            throw new LexicalError(SCANNER_ERROR[lastState], lastState);
+            throw new LexicalError(SCANNER_ERROR[lastState], start, startLine, lastState);
 
         setPosition(end);
 

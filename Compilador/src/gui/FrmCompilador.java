@@ -389,11 +389,12 @@ public class FrmCompilador extends JFrame {
 			    imprimirMensagem("programa compilado com sucesso");
 			}
 			catch ( LexicalError e ) {
-				String mensagem = "";
-				mensagem = e.getMessage();
-				if(e.getPosition() == 0){
-					mensagem += taEditor.getText().charAt(lexico.getPosition()-1);
+				String mensagem = "Erro na linha " + e.getLine() + " - ";
+				if (e.getState() == 0){
+					mensagem += taEditor.getText().charAt(lexico.getPosition() - 1) + " ";
 				}
+				
+				mensagem += e.getMessage();
 			    imprimirMensagem(mensagem);
 			}
 		}
