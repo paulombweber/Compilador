@@ -1,11 +1,14 @@
 #Options
 GenerateScanner = true
-GenerateParser = false
+GenerateParser = true
 Language = Java
 ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
 ScannerCaseSensitive = true
 ScannerTable = Full
 Input = Stream
+Parser = LL
 #RegularDefinitions
 letra: [a-zA-Z]
 digito: [0-9]
@@ -30,9 +33,9 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
   constanteString: {aspas} ([^\"\\\n] | \\ (\\ | \"))* {aspas}
 
   // comentarios: de linha e de bloco - ignorados
-  // e) coment�rio de linha
+  // e) coment�rio de linha
   :!{comentarioLinha}
-  // f) coment�rio de bloco
+  // f) coment�rio de bloco
   :!{comentarioBloco}
 
   //caracteres de formatacao - ignorados
@@ -75,3 +78,100 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
   pr_true = identificador : "true"
   pr_void = identificador : "void"
   pr_while = identificador : "while"
+  pr_global = identificador : "global"
+  pr_local = identificador : "local"
+  pr_return = identificador : "return"
+#NonTerminals
+<programa>
+
+<variaveis_globais>
+<lista_modulos>
+<lista_comandos>
+<comandos>
+<modulo>
+<tipo_modulo>
+<tipo>
+<lista_parametros>
+<parametros>
+<parametro>
+<variaveis_locais>
+<retorno>
+<variaveis>
+<lista_identificadores>
+<valor>
+<constante>
+<atribuicao>
+<entrada>
+<saida>
+<print>
+<println>
+<lista_expressao>
+<selecao>
+<else>
+<repeticao>
+<chamada_modulo>
+<parametros_reais>
+<expressao>
+<elemento>
+<relacional>
+<operador_relacional>
+<aritmetica>
+<termo>
+<fator>
+#Grammar
+// Programa geral
+<programa>::= pr_main <variaveis_globais>  <lista_modulos> <lista_comandos> pr_end;
+<variaveis_globais>::= î | pr_global <variaveis> <variaveis_globais>;
+<lista_modulos>::= î | <modulo> <lista_modulos>;
+<lista_comandos>::= î | <comandos> <lista_comandos>;
+<comandos>::= <atribuicao> | <entrada> | <saida> | <selecao> | <repeticao> | <chamada_modulo>;
+
+// forma do modulo
+<modulo>::= <tipo_modulo> identificador "(" <lista_parametros> ")" <variaveis_locais> <lista_comandos> <retorno> pr_end;
+<tipo_modulo>::= <tipo> | pr_void;
+<tipo>::= pr_boolean | pr_float | pr_integer | pr_string;
+<lista_parametros>::= î | <parametros>;
+<parametros>::= <parametro> | <parametro> "," <parametros>;
+<parametro>::= <tipo> identificador;
+<variaveis_locais>::= î | pr_local <variaveis> <variaveis_locais>;
+<retorno>::= î | pr_return <expressao>;
+
+// forma da variavel
+<variaveis>::= <tipo> <lista_identificadores> <valor>";" ; 
+<lista_identificadores>::= identificador | identificador "," <lista_identificadores>;
+<valor>::= î | "=" <constante>;
+<constante>::= constanteInteger | constanteFloat | constanteString | pr_true | pr_false;
+
+//forma da atribuicao
+<atribuicao>::= identificador "=" <expressao>;
+
+// forma de entrada
+<entrada>::= pr_scan "(" <lista_identificadores> ")" ";" ;
+
+// forma de saida
+<saida>::= <print> | <println>;
+<print>::=  pr_print "(" <lista_expressao> ")" ";" ;
+<println>::= pr_println "(" <lista_expressao> ")" ";";
+<lista_expressao>::= <expressao> | <expressao> "," <lista_expressao>;
+
+// forma selecao
+<selecao>::= pr_if "(" <expressao> ")" <lista_comandos> <else> pr_end ";";
+<else>::= î | pr_else <lista_comandos>;
+
+//forma repeticao
+<repeticao>::= pr_do <lista_comandos> pr_while "(" <expressao> ")" ";";
+
+//forma chamada de modulo
+<chamada_modulo>::= identificador "(" <parametros_reais> ")" ";";
+<parametros_reais>::= î | <lista_expressao>;
+
+//forma da expressao
+<expressao>::= <expressao> "||" <elemento> | <expressao> "&&" <elemento> | <elemento>;
+<elemento>::= <relacional> | pr_true | pr_false | "!" <expressao>;
+<relacional>::= <aritmetica> <operador_relacional> <aritmetica> | <aritmetica>;
+<operador_relacional>::= "==" | "!=" | "<" | "<=" | ">" | ">=";
+<aritmetica>::= <aritmetica> "+" <termo> | <aritmetica> "-" <termo> | <termo>;
+<termo>::= <termo> "*" <fator> | <termo> "/" <fator> | <fator>;
+<fator>::= identificador | identificador "(" <lista_expressao> ")" | constanteInteger | constanteFloat | constanteString | "(" <expressao> ")" | "+" <fator> | "-" <fator>;
+
+
