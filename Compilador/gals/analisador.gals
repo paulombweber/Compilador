@@ -102,20 +102,19 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 <lista_identificadores1>
 <valor>
 <constante>
-<atriModulo>
-<atriModulo1>
+<atribuicao_chamada_modulo>
+<atribuicao_chamada_modulo1>
+<atribuicao>
 <parametros_reais>
 <entrada>
 <saida>
 <print>
-<lista_expressao>
-<lista_expressao1>
-<relecao>
-<relecao1>
-<relecao2>
-<relecao3>
+<lista_expressoes>
+<lista_expressoes1>
+<selecao>
 <else>
 <repeticao>
+<chamada_modulo>
 <expressao>
 <expressao1>
 <elemento>
@@ -137,7 +136,8 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 <variaveis_globais>::= î | pr_global <variaveis> <variaveis_globais>;
 <lista_modulos>::= î | <modulo> <lista_modulos>;
 <lista_comandos>::= î | <comandos> <lista_comandos>;
-<comandos>::= <atriModulo> | <entrada> | <saida> | <relecao>;
+//<comandos>::= <atribuicao> | <entrada> | <saida> | <selecao> | <repeticao> | <chamada_modulo>;
+<comandos>::= <atribuicao> | <entrada> | <saida> | <selecao> | <repeticao> | <chamada_modulo>;
 
 // forma do modulo
 <modulo>::= <tipo_modulo> identificador "(" <lista_parametros> ")" <variaveis_locais> <lista_comandos> <retorno> pr_end;
@@ -157,41 +157,47 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 <valor>::= î | "=" <constante>;
 <constante>::= constanteInteger | constanteFloat | constanteString | pr_true | pr_false;
 
-//forma da atribuicao e Chamada de Modulo
-<atriModulo>::= identificador <atriModulo1>;
-<atriModulo1>::=  "=" <expressao> | "(" <parametros_reais> ")" ";";
+//forma da atribuicao + chamada de módulo
+<atribuicao_chamada_modulo>::= identificador <atribuicao_chamada_modulo1>;
+<atribuicao_chamada_modulo1>::= <atribuicao> | <chamada_modulo>;
 
-<parametros_reais>::= î | <lista_expressao>;
+//forma da atribuicao
+<atribuicao>::= "=" <expressao>;
+
+//forma da chamada de módulo
+<chamada_modulo>::= "(" <parametros_reais> ")";
+<parametros_reais>::= î | <lista_expressoes>;
 
 // forma de entrada
 <entrada>::= pr_scan "(" <lista_identificadores> ")" ";" ;
 
 // forma de saida
-<saida>::= <print> "(" <lista_expressao> ")" ";" ;
+<saida>::= <print> "(" <lista_expressoes> ")" ";" ;
 <print>::=  pr_print | pr_println;
-<lista_expressao>::= <expressao> <lista_expressao1>
-<lista_expressao1>î | "," <lista_expressao>;
+<lista_expressoes>::= <expressao> <lista_expressoes1>
+<lista_expressoes1>î | "," <lista_expressoes>;
 
-// forma selecao e repetição
-<relecao>::= <relecao> "(" <expressao> ")" <relecao2> <lista_comandos> <relecao3>";";
-<relecao1>::= pr_if | pr_while;
-<relecao2>::= î | pr_do;
-<relecao3>::= î |  <else> pr_end;
+// forma selecao
+<selecao>::= pr_if "(" <expressao> ")" <lista_comandos> <else> pr_end;
 <else>::= î | pr_else <lista_comandos>;
 
+//forma repetição
+<repeticao>::= pr_do <lista_comandos> pr_while "(" <expressao> ")";
+
+
 //forma da expressao
-<expressao>::= <expressao1> <elemento>;
-<expressao1>::= î | <expressao> <simbolo>;
+<expressao>::= <elemento> <expressao1>;
+<expressao1>::= î | <simbolo> <elemento> <expressao1>;
 <simbolo>::= "||" | "&&";
 <elemento>::= <relacional> | pr_true | pr_false | "!" <expressao>;
 <relacional>::= <aritmetica1> <aritmetica>;
 <relacional1>::= î | <aritmetica> <operador_relacional>; 
 <operador_relacional>::= "==" | "!=" | "<" | "<=" | ">" | ">=";
-<aritmetica>::= <aritmetica1> <termo>;
-<aritmetica1>::= i | <aritmetica> <simbolo1>;
+<aritmetica>::= <termo> <aritmetica1>;
+<aritmetica1>::= î | <simbolo1> <termo> <aritmetica1>;
 <simbolo1>::= "+" | "-";
-<termo>::= <termo1> <fator>;
-<termo1>::= î | <termo><simbolo2>;
+<termo>::= <fator> <termo1>;
+<termo1>::= î | <simbolo2> <fator> <termo1>;
 <simbolo2>::= "*" | "/";
 <fator>::= identificador <fator1> | constanteInteger | constanteFloat | constanteString | "(" <expressao> ")" | <simbolo1> <fator>;
-<fator1>::= î | "(" <lista_expressao> ")" ;
+<fator1>::= î | "(" <lista_expressoes> ")" ;
