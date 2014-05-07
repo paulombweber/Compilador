@@ -82,12 +82,16 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
   pr_local = identificador : "local"
   pr_return = identificador : "return"
 #NonTerminals
+//forma geral do programa
 <programa>
-
 <variaveis_globais>
 <lista_modulos>
 <lista_comandos>
 <comandos>
+<atribuicao_chamada_modulo>
+<atribuicao_chamada_modulo1>
+
+//forma geral do módulo
 <modulo>
 <tipo_modulo>
 <tipo>
@@ -97,49 +101,67 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 <parametro>
 <variaveis_locais>
 <retorno>
+
+//forma geral de variáveis
 <variaveis>
 <lista_identificadores>
 <lista_identificadores1>
 <valor>
 <constante>
-<atribuicao_chamada_modulo>
-<atribuicao_chamada_modulo1>
+
+//forma geral do comando de atribuicao
 <atribuicao>
-<parametros_reais>
+
+//forma geral do comando de entrada de dados
 <entrada>
+
+//forma geral dos comandos de saída de dados
 <saida>
 <print>
+<println>
 <lista_expressoes>
 <lista_expressoes1>
+
+//forma geral do comando de seleção
 <selecao>
 <else>
+
+//forma geral do comando de repetição
 <repeticao>
+
+//forma geral da chamada de um módulo
 <chamada_modulo>
+<parametros_reais>
+
+//forma geral da expressão
 <expressao>
 <expressao1>
+<simbolo_relacional>
 <elemento>
 <relacional>
 <relacional1>
 <operador_relacional>
 <aritmetica>
 <aritmetica1>
+<simbolo_aritmetica>
 <termo>
 <termo1>
+<simbolo_termo>
 <fator>
 <fator1>
-<simbolo>
-<simbolo1>
-<simbolo2>
+
+
 #Grammar
-// Programa geral
-<programa>::= pr_main <variaveis_globais>  <lista_modulos> <lista_comandos> pr_end;
+//forma geral do programa
+<programa>::= pr_main <variaveis_globais> <lista_modulos> <lista_comandos> pr_end;
 <variaveis_globais>::= î | pr_global <variaveis> <variaveis_globais>;
 <lista_modulos>::= î | <modulo> <lista_modulos>;
 <lista_comandos>::= î | <comandos> <lista_comandos>;
-//<comandos>::= <atribuicao> | <entrada> | <saida> | <selecao> | <repeticao> | <chamada_modulo>;
-<comandos>::= <atribuicao> | <entrada> | <saida> | <selecao> | <repeticao> | <chamada_modulo>;
+<comandos>::= <atribuicao_chamada_modulo> | <entrada> | <saida> | <selecao> | <repeticao>;
+<atribuicao_chamada_modulo>::= identificador <atribuicao_chamada_modulo1>;
+<atribuicao_chamada_modulo1>::= <atribuicao> | <chamada_modulo>;
 
-// forma do modulo
+//forma geral do módulo
 <modulo>::= <tipo_modulo> identificador "(" <lista_parametros> ")" <variaveis_locais> <lista_comandos> <retorno> pr_end;
 <tipo_modulo>::= <tipo> | pr_void;
 <tipo>::= pr_boolean | pr_float | pr_integer | pr_string;
@@ -148,56 +170,52 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 <parametros1>::= î | "," <parametros>;
 <parametro>::= <tipo> identificador;
 <variaveis_locais>::= î | pr_local <variaveis> <variaveis_locais>;
-<retorno>::= î | pr_return <expressao>;
+<retorno>::= î | pr_return <expressao> ";";
 
-// forma da variavel
-<variaveis>::= <tipo> <lista_identificadores> <valor>";" ; 
-<lista_identificadores>::= identificador <lista_identificadores1>; 
+//forma geral de variáveis
+<variaveis>::= <tipo> <lista_identificadores> <valor> ";";
+<lista_identificadores>::= identificador <lista_identificadores1>;
 <lista_identificadores1>::= î | "," <lista_identificadores>;
 <valor>::= î | "=" <constante>;
 <constante>::= constanteInteger | constanteFloat | constanteString | pr_true | pr_false;
 
-//forma da atribuicao + chamada de módulo
-<atribuicao_chamada_modulo>::= identificador <atribuicao_chamada_modulo1>;
-<atribuicao_chamada_modulo1>::= <atribuicao> | <chamada_modulo>;
+//forma geral do comando de atribuicao
+<atribuicao>::= "=" <expressao> ";";
 
-//forma da atribuicao
-<atribuicao>::= "=" <expressao>;
+//forma geral do comando de entrada de dados
+<entrada>::= pr_scan "(" <lista_identificadores> ")" ";";
 
-//forma da chamada de módulo
-<chamada_modulo>::= "(" <parametros_reais> ")";
-<parametros_reais>::= î | <lista_expressoes>;
+//forma geral dos comandos de saída de dados
+<saida>::= <print> | <println>;
+<print>::= pr_print "(" <lista_expressoes> ")" ";";
+<println>::= pr_println "(" <lista_expressoes> ")" ";";
+<lista_expressoes>::= <expressao> <lista_expressoes1>;
+<lista_expressoes1>::= î | "," <lista_expressoes>;
 
-// forma de entrada
-<entrada>::= pr_scan "(" <lista_identificadores> ")" ";" ;
-
-// forma de saida
-<saida>::= <print> "(" <lista_expressoes> ")" ";" ;
-<print>::=  pr_print | pr_println;
-<lista_expressoes>::= <expressao> <lista_expressoes1>
-<lista_expressoes1>î | "," <lista_expressoes>;
-
-// forma selecao
-<selecao>::= pr_if "(" <expressao> ")" <lista_comandos> <else> pr_end;
+//forma geral do comando de seleção
+<selecao>::= pr_if "(" <expressao> ")" <lista_comandos> <else> pr_end ";";
 <else>::= î | pr_else <lista_comandos>;
 
-//forma repetição
-<repeticao>::= pr_do <lista_comandos> pr_while "(" <expressao> ")";
+//forma geral do comando de repetição
+<repeticao>::= pr_do <lista_comandos> pr_while "(" <expressao> ")" ";";
 
+//forma geral da chamada de um módulo
+<chamada_modulo>::= "(" <parametros_reais> ")" ";";
+<parametros_reais>::= î | <lista_expressoes>;
 
-//forma da expressao
+//forma geral da expressão
 <expressao>::= <elemento> <expressao1>;
-<expressao1>::= î | <simbolo> <elemento> <expressao1>;
-<simbolo>::= "||" | "&&";
-<elemento>::= <relacional> | pr_true | pr_false | "!" <expressao>;
-<relacional>::= <aritmetica1> <aritmetica>;
-<relacional1>::= î | <aritmetica> <operador_relacional>; 
+<expressao1>::= î | <simbolo_relacional> <elemento> <expressao1>;
+<simbolo_relacional>::= "||" | "&&";
+<elemento>::= <relacional> | pr_true | pr_false | "!" <elemento>;
+<relacional>::= <aritmetica> <relacional1>;
+<relacional1>::= î | <operador_relacional> <aritmetica>;
 <operador_relacional>::= "==" | "!=" | "<" | "<=" | ">" | ">=";
 <aritmetica>::= <termo> <aritmetica1>;
-<aritmetica1>::= î | <simbolo1> <termo> <aritmetica1>;
-<simbolo1>::= "+" | "-";
+<aritmetica1>::= î | <simbolo_aritmetica> <termo> <aritmetica1>;
+<simbolo_aritmetica>::= "-" | "+";
 <termo>::= <fator> <termo1>;
-<termo1>::= î | <simbolo2> <fator> <termo1>;
-<simbolo2>::= "*" | "/";
-<fator>::= identificador <fator1> | constanteInteger | constanteFloat | constanteString | "(" <expressao> ")" | <simbolo1> <fator>;
-<fator1>::= î | "(" <lista_expressoes> ")" ;
+<termo1>::= î | <simbolo_termo> <fator> <termo1>;
+<simbolo_termo>::= "*" | "/";
+<fator>::= identificador <fator1> | constanteInteger | constanteFloat | constanteString | "(" <expressao> ")" | "+" <fator> | "-" <fator>;
+<fator1>::= î | "(" <lista_expressoes> ")";
