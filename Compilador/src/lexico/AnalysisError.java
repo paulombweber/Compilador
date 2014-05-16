@@ -3,10 +3,12 @@ package lexico;
 public class AnalysisError extends Exception
 {
     private int position;
+	private int line;
 
-    public AnalysisError(String msg, int position)
+    public AnalysisError(String msg, int line, int position)
     {
         super(msg);
+        this.line = line;
         this.position = position;
     }
 
@@ -20,9 +22,14 @@ public class AnalysisError extends Exception
     {
         return position;
     }
+    
+	public int getLine() {
+		return line;
+	}    
 
     public String toString()
     {
         return super.toString() + ", @ "+position;
     }
+       
 }

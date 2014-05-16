@@ -4,9 +4,9 @@ import lexico.AnalysisError;
 
 public class SemanticError extends AnalysisError
 {
-    public SemanticError(String msg, int position)
+    public SemanticError(String msg, int line, int position)
 	 {
-        super(msg, position);
+        super(msg, line, position);
     }
 
     public SemanticError(String msg)

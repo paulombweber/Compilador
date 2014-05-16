@@ -35,6 +35,10 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import sintatico.SemanticError;
+import sintatico.Semantico;
+import sintatico.Sintatico;
+import sintatico.SyntaticError;
 import lexico.Classes;
 import lexico.LexicalError;
 import lexico.Lexico;
@@ -373,24 +377,15 @@ public class FrmCompilador extends JFrame {
 			imprimirMensagem("nenhum programa para compilar");
 		} else {
 			Lexico lexico = new Lexico();
+			Sintatico sintatico = new Sintatico();
+			Semantico semantico = new Semantico();
 			lexico.setInput(taEditor.getText());
-			ArrayList<String> list = new ArrayList<>();
-			Token t = null;
 			try {
-			    list.add(formatMessage("linha", "classe", "lexema"));
-			    while ( (t = lexico.nextToken()) != null )
-			    {
-			    	list.add(newline(t));
-			    }
-			    
-			    for(String line: list){
-			    	imprimirMensagem(line);
-			    }
+				sintatico.parse(lexico, semantico);
 			    imprimirMensagem("programa compilado com sucesso");
-			}
-			catch ( LexicalError e ) {
+			} catch (LexicalError | SyntaticError | SemanticError e) {
 				String mensagem = "Erro na linha " + e.getLine() + " - ";
-				if (e.getState() == 0){
+				if ((e instanceof LexicalError) && (((LexicalError) e).getState() == 0)) {
 					mensagem += taEditor.getText().charAt(lexico.getPosition() - 1) + " ";
 				}
 				
