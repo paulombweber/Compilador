@@ -136,17 +136,14 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 //forma geral da expressão
 <expressao>
 <expressao1>
-<simbolo_relacional>
 <elemento>
 <relacional>
 <relacional1>
 <operador_relacional>
 <aritmetica>
 <aritmetica1>
-<simbolo_aritmetica>
 <termo>
 <termo1>
-<simbolo_termo>
 <fator>
 <fator1>
 
@@ -205,17 +202,14 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 
 //forma geral da expressão
 <expressao>::= <elemento> <expressao1>;
-<expressao1>::= î | <simbolo_relacional> <elemento> <expressao1>;
-<simbolo_relacional>::= "||" | "&&";
+<expressao1>::= î | "||" <elemento> <expressao1> | "&&" <elemento> <expressao1>;
 <elemento>::= <relacional> | pr_true | pr_false | "!" <elemento>;
 <relacional>::= <aritmetica> <relacional1>;
 <relacional1>::= î | <operador_relacional> <aritmetica>;
 <operador_relacional>::= "==" | "!=" | "<" | "<=" | ">" | ">=";
 <aritmetica>::= <termo> <aritmetica1>;
-<aritmetica1>::= î | <simbolo_aritmetica> <termo> <aritmetica1>;
-<simbolo_aritmetica>::= "-" | "+";
+<aritmetica1>::= î | "-" <termo> <aritmetica1> | "+" <termo> <aritmetica1>;
 <termo>::= <fator> <termo1>;
-<termo1>::= î | <simbolo_termo> <fator> <termo1>;
-<simbolo_termo>::= "*" | "/";
+<termo1>::= î | "*" <fator> <termo1> | "/" <fator> <termo1>;
 <fator>::= identificador <fator1> | constanteInteger | constanteFloat | constanteString | "(" <expressao> ")" | "+" <fator> | "-" <fator>;
 <fator1>::= î | "(" <lista_expressoes> ")";
