@@ -1,6 +1,8 @@
 package lexico;
 
-public interface Constants extends ScannerConstants
+import sintatico.ParserConstants;
+
+public interface Constants extends ScannerConstants, ParserConstants
 {
     int EPSILON  = 0;
     int DOLLAR   = 1;
@@ -43,5 +45,8 @@ public interface Constants extends ScannerConstants
     int t_pr_true = 37;
     int t_pr_void = 38;
     int t_pr_while = 39;
+    int t_pr_global = 40;
+    int t_pr_local = 41;
+    int t_pr_return = 42;
 
 }
