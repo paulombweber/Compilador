@@ -91,11 +91,8 @@ public class Sintatico implements Constants
 	private String getErrorMessage(final int errorCode, final String lexeme) {
 		String msg;
 		switch (errorCode) {
-			case 43 :
+			default:
 				msg = PARSER_ERROR[errorCode] + lexeme;
-				break;
-			default :
-				msg = PARSER_ERROR[errorCode];
 				break;
 		}
 		return msg;

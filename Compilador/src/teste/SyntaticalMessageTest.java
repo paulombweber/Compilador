@@ -1,9 +1,9 @@
 package teste;
 
-import junit.framework.Assert;
 import lexico.LexicalError;
 import lexico.Lexico;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -28,15 +28,7 @@ public class SyntaticalMessageTest {
 	@Test
 	public void testProgramaTokenFailed() {
 		String program = "programa xpto";
-		try {
-			executeAnalysis(program);
-			Assert.fail("Uma mensagem de erro deveria ter sido exibida");
-		} catch (SyntaticError e) {
-			Assert.assertEquals("Era esperado main, encontrado: programa", e.getMessage());
-		} catch (LexicalError | SemanticError e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
+		executeAnalysis(program, "Era esperado main, encontrado: programa");
 	}
 	
 	/**
@@ -45,17 +37,33 @@ public class SyntaticalMessageTest {
 	 */
 	@Test
 	public void testProgramaTokenSucess() {
-		String program = "main xptoc end";
+		String program = "main end";
+		executeAnalysis(program, "");
+	}
+	
+	@Test
+	public void testFator1Invalido() {
+		String program = "main print(x x ++); end";
+		executeAnalysis(program, "Era esperado expressão, encontrado: x");
+	}
+	
+	@Test
+	public void testFatorInvalido() {
+		String program = "main print(x ++); end";
+		executeAnalysis(program, "Era esperado expressão, encontrado: )");
+		
+	}
+	
+	private void executeAnalysis(final String program, final String message){
 		try {
-			executeAnalysis(program);
-		} catch (SyntaticError | LexicalError | SemanticError e) {
+			lexico.setInput(program);
+			sintatico.parse(lexico, semantico);
+			Assert.assertTrue(message.isEmpty());
+		} catch (SyntaticError e) {
+			Assert.assertEquals(message, e.getMessage());
+		} catch (LexicalError | SemanticError e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
-	}
-	
-	private void executeAnalysis(final String program) throws LexicalError, SyntaticError, SemanticError {
-		lexico.setInput(program);
-		sintatico.parse(lexico, semantico);
 	}
 }

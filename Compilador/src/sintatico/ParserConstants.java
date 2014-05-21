@@ -286,7 +286,7 @@ public interface ParserConstants
 			"<aritmetica1> inválido",
 			"<termo> inválido",
 			"<termo1> inválido",
-			"<fator> inválido",
-			"<fator1> inválido"
+			"Era esperado expressão, encontrado: ",
+			"Era esperado expressão, encontrado: "
 										};
 }
