@@ -51,7 +51,36 @@ public class SyntaticalMessageTest {
 	public void testFatorInvalido() {
 		String program = "main print(x ++); end";
 		executeAnalysis(program, "Era esperado expressão, encontrado: )");
-		
+	}
+	
+	@Test
+	public void testTermoInvalido() {
+		String program = "main print(x * (); end";
+		executeAnalysis(program, "Era esperado expressão, encontrado: )");
+	}
+	
+	@Test
+	public void testListaExpressoesInvalido() {
+		String program = "main integer xpto(integer a) end xpto(a; end";
+		executeAnalysis(program, "Era esperado expressão, encontrado: ;");
+	}
+	
+	@Test
+	public void testParametrosReaisInvalido() {
+		String program = "main integer xpto(integer a) end xpto(,); end";
+		executeAnalysis(program, "Era esperado expressão, encontrado: ,");
+	}
+	
+	@Test
+	public void testFinalDeArquivoInvalido() {
+		String program = "main integer xpto(integer a) end xpto(xpto(a))";
+		executeAnalysis(program, "Era esperado \";\", encontrado: final de arquivo");
+	}
+	
+	@Test
+	public void testAtribuicaoModulo1Invalido() {
+		String program = "main do a + 1; while(true); end";
+		executeAnalysis(program, "Era esperado \"=\" ou \"(\", encontrado: +");
 	}
 	
 	private void executeAnalysis(final String program, final String message){

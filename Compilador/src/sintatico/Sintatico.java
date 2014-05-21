@@ -69,7 +69,7 @@ public class Sintatico implements Constants
 			}
 			else
 			{
-				throw new SyntaticError(PARSER_ERROR[x], currentToken.getLine(), currentToken.getPosition());
+				throw new SyntaticError(getErrorMessage(x, currentToken.getLexeme()), currentToken.getLine(), currentToken.getPosition());
 			}
 		}
 		else if (isNonTerminal(x))
@@ -88,11 +88,14 @@ public class Sintatico implements Constants
 		}
 	}
 	
-	private String getErrorMessage(final int errorCode, final String lexeme) {
+	private String getErrorMessage(final int errorCode, String lexeme) {
 		String msg;
 		switch (errorCode) {
 			default:
-				msg = PARSER_ERROR[errorCode] + lexeme;
+				if(lexeme.equals("$")){
+					lexeme = "final de arquivo";
+				}
+				msg = PARSER_ERROR[errorCode] + ", encontrado: " + lexeme;
 				break;
 		}
 		return msg;
