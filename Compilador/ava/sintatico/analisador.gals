@@ -1,0 +1,215 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = Stream
+Parser = LL
+#RegularDefinitions
+letra: [a-zA-Z]
+digito: [0-9]
+digito2: [1-9]
+aspas: \" 
+barra: "/"
+chaveAbre: "{"
+chaveFecha: "}"
+comentarioLinha: {barra}{barra}([^\n])*
+comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
+#Tokens
+  // a) identificador
+  identificador : ({letra} | (_{letra})) ({letra} | {digito} | (_{letra}))*
+
+  //b) constante integer
+  constanteInteger: 0 | ({digito2} {digito}? {digito}? {digito}? {digito}?)
+  
+  //c) constante float
+  constanteFloat: (0 | ({digito2} {digito}? {digito}? {digito}? {digito}?)) , (0 | ({digito}? {digito}? {digito}? {digito}?) {digito2})
+  
+  // d) constante string
+  constanteString: {aspas} ([^\"\\\n] | \\ (\\ | \"))* {aspas}
+
+  // comentarios: de linha e de bloco - ignorados
+  // e) comentário de linha
+  :!{comentarioLinha}
+  // f) comentário de bloco
+  :!{comentarioBloco}
+
+  //caracteres de formatacao - ignorados
+  :[\t\s\n]  
+  
+  // simbolos especiais
+  "+"
+  "-"
+  "*"
+  "/"
+  "=" 
+  "&&"
+  "||"
+  "!"
+  "=="
+  "!="
+  "<"
+  "<="
+  ">"
+  ">="
+  ","
+  ";"
+  "("
+  ")"
+
+  //palavras reservadas
+  pr_boolean = identificador : "boolean"
+  pr_do = identificador : "do"
+  pr_else = identificador : "else"
+  pr_end = identificador : "end"
+  pr_false = identificador : "false"
+  pr_float = identificador : "float"
+  pr_if = identificador : "if"
+  pr_integer = identificador : "integer"
+  pr_main = identificador : "main"
+  pr_print = identificador : "print"
+  pr_println = identificador : "println"
+  pr_scan = identificador : "scan"
+  pr_string = identificador : "string"
+  pr_true = identificador : "true"
+  pr_void = identificador : "void"
+  pr_while = identificador : "while"
+  pr_global = identificador : "global"
+  pr_local = identificador : "local"
+  pr_return = identificador : "return"
+#NonTerminals
+//forma geral do programa
+<programa>
+<variaveis_globais>
+<lista_modulos>
+<lista_comandos>
+<comandos>
+<atribuicao_chamada_modulo>
+<atribuicao_chamada_modulo1>
+
+//forma geral do módulo
+<modulo>
+<tipo_modulo>
+<tipo>
+<lista_parametros>
+<parametros>
+<parametros1>
+<parametro>
+<variaveis_locais>
+<retorno>
+
+//forma geral de variáveis
+<variaveis>
+<lista_identificadores>
+<lista_identificadores1>
+<valor>
+<constante>
+
+//forma geral do comando de atribuicao
+<atribuicao>
+
+//forma geral do comando de entrada de dados
+<entrada>
+
+//forma geral dos comandos de saída de dados
+<saida>
+<print>
+<println>
+<lista_expressoes>
+<lista_expressoes1>
+
+//forma geral do comando de seleção
+<selecao>
+<else>
+
+//forma geral do comando de repetição
+<repeticao>
+
+//forma geral da chamada de um módulo
+<chamada_modulo>
+<parametros_reais>
+
+//forma geral da expressão
+<expressao>
+<expressao1>
+<elemento>
+<relacional>
+<relacional1>
+<operador_relacional>
+<aritmetica>
+<aritmetica1>
+<termo>
+<termo1>
+<fator>
+<fator1>
+
+
+#Grammar
+//forma geral do programa
+<programa>::= pr_main <variaveis_globais> <lista_modulos> <lista_comandos> pr_end;
+<variaveis_globais>::= î | pr_global <variaveis> <variaveis_globais>;
+<lista_modulos>::= î | <modulo> <lista_modulos>;
+<lista_comandos>::= î | <comandos> <lista_comandos>;
+<comandos>::= <atribuicao_chamada_modulo> | <entrada> | <saida> | <selecao> | <repeticao>;
+<atribuicao_chamada_modulo>::= identificador <atribuicao_chamada_modulo1>;
+<atribuicao_chamada_modulo1>::= <atribuicao> | <chamada_modulo>;
+
+//forma geral do módulo
+<modulo>::= <tipo_modulo> identificador "(" <lista_parametros> ")" <variaveis_locais> <lista_comandos> <retorno> pr_end;
+<tipo_modulo>::= <tipo> | pr_void;
+<tipo>::= pr_boolean | pr_float | pr_integer | pr_string;
+<lista_parametros>::= î | <parametros>;
+<parametros>::= <parametro> <parametros1>;
+<parametros1>::= î | "," <parametros>;
+<parametro>::= <tipo> identificador;
+<variaveis_locais>::= î | pr_local <variaveis> <variaveis_locais>;
+<retorno>::= î | pr_return <expressao> ";";
+
+//forma geral de variáveis
+<variaveis>::= <tipo> <lista_identificadores> <valor> ";";
+<lista_identificadores>::= identificador <lista_identificadores1>;
+<lista_identificadores1>::= î | "," <lista_identificadores>;
+<valor>::= î | "=" <constante>;
+<constante>::= constanteInteger | constanteFloat | constanteString | pr_true | pr_false;
+
+//forma geral do comando de atribuicao
+<atribuicao>::= "=" <expressao> ";";
+
+//forma geral do comando de entrada de dados
+<entrada>::= pr_scan "(" <lista_identificadores> ")" ";";
+
+//forma geral dos comandos de saída de dados
+<saida>::= <print> | <println>;
+<print>::= pr_print "(" <lista_expressoes> ")" ";";
+<println>::= pr_println "(" <lista_expressoes> ")" ";";
+<lista_expressoes>::= <expressao> <lista_expressoes1>;
+<lista_expressoes1>::= î | "," <lista_expressoes>;
+
+//forma geral do comando de seleção
+<selecao>::= pr_if "(" <expressao> ")" <lista_comandos> <else> pr_end ";";
+<else>::= î | pr_else <lista_comandos>;
+
+//forma geral do comando de repetição
+<repeticao>::= pr_do <lista_comandos> pr_while "(" <expressao> ")" ";";
+
+//forma geral da chamada de um módulo
+<chamada_modulo>::= "(" <parametros_reais> ")" ";";
+<parametros_reais>::= î | <lista_expressoes>;
+
+//forma geral da expressão
+<expressao>::= <elemento> <expressao1>;
+<expressao1>::= î | "||" <elemento> <expressao1> | "&&" <elemento> <expressao1>;
+<elemento>::= <relacional> | pr_true | pr_false | "!" <elemento>;
+<relacional>::= <aritmetica> <relacional1>;
+<relacional1>::= î | <operador_relacional> <aritmetica>;
+<operador_relacional>::= "==" | "!=" | "<" | "<=" | ">" | ">=";
+<aritmetica>::= <termo> <aritmetica1>;
+<aritmetica1>::= î | "-" <termo> <aritmetica1> | "+" <termo> <aritmetica1>;
+<termo>::= <fator> <termo1>;
+<termo1>::= î | "*" <fator> <termo1> | "/" <fator> <termo1>;
+<fator>::= identificador <fator1> | constanteInteger | constanteFloat | constanteString | "(" <expressao> ")" | "+" <fator> | "-" <fator>;
+<fator1>::= î | "(" <lista_expressoes> ")";
