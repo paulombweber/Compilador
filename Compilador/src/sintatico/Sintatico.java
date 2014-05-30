@@ -69,7 +69,7 @@ public class Sintatico implements Constants
 			}
 			else
 			{
-				throw new SyntaticError(getErrorMessage(x, currentToken.getLexeme()), currentToken.getLine(), currentToken.getPosition());
+				throw new SyntaticError(getErrorMessage(x, currentToken), currentToken.getLine(), currentToken.getPosition());
 			}
 		}
 		else if (isNonTerminal(x))
@@ -77,7 +77,7 @@ public class Sintatico implements Constants
 			if (pushProduction(x, a)) {
 				return false;
 			} else {
-				throw new SyntaticError(getErrorMessage(x, currentToken.getLexeme()), currentToken.getLine(),
+				throw new SyntaticError(getErrorMessage(x, currentToken), currentToken.getLine(),
 						currentToken.getPosition());
 			}
 		}
@@ -88,14 +88,18 @@ public class Sintatico implements Constants
 		}
 	}
 	
-	private String getErrorMessage(final int errorCode, String lexeme) {
+	private String getErrorMessage(final int errorCode, Token token) {
 		String msg;
 		switch (errorCode) {
 			default:
-				if(lexeme.equals("$")){
-					lexeme = "final de arquivo";
-				}
-				msg = PARSER_ERROR[errorCode] + ", encontrado: " + lexeme;
+				String expected = token.getLexeme();				
+				if (expected.equals("$")) {
+					expected = "final de arquivo";
+				} else if (token.getId() == 2) { // identificador
+					expected = "identificador (" + expected + ")";
+				}				
+				
+				msg = "Era esperado " + EXPECTED_SYMBOLS[errorCode] + ", encontrado: " + expected;
 				break;
 		}
 		return msg;

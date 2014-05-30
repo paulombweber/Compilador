@@ -198,95 +198,95 @@ public interface ParserConstants
 										{22, 69, 23}
 										};
 	
-	String[]	PARSER_ERROR			=
-										{
+	String[]	EXPECTED_SYMBOLS		=
+										{ // símbolos esperados
 										"",
-										"Era esperado fim de programa",
-										"Era esperado identificador",
-										"Era esperado constanteInteger",
-										"Era esperado constanteFloat",
-										"Era esperado constanteString",
-										"Era esperado \"+\"",
-										"Era esperado \"-\"",
-										"Era esperado \"*\"",
-										"Era esperado \"/\"",
-										"Era esperado \"=\"",
-										"Era esperado \"&&\"",
-										"Era esperado \"||\"",
-										"Era esperado \"!\"",
-										"Era esperado \"==\"",
-										"Era esperado \"!=\"",
-										"Era esperado \"<\"",
-										"Era esperado \"<=\"",
-										"Era esperado \">\"",
-										"Era esperado \">=\"",
-										"Era esperado \",\"",
-										"Era esperado \";\"",
-										"Era esperado \"(\"",
-										"Era esperado \")\"",
-										"Era esperado boolean",
-										"Era esperado do",
-										"Era esperado else",
-										"Era esperado end",
-										"Era esperado false",
-										"Era esperado float",
-										"Era esperado if",
-										"Era esperado integer",
-										"Era esperado main",
-										"Era esperado print",
-										"Era esperado println",
-										"Era esperado scan",
-										"Era esperado string",
-										"Era esperado true",
-										"Era esperado void",
-										"Era esperado while",
-										"Era esperado global",
-										"Era esperado local",
-										"Era esperado return",
-										"Era esperado main", //"<programa> inválido",
-			"<variaveis_globais> inválido",
-			"<lista_modulos> inválido",
-			"<lista_comandos> inválido",
-			"<comandos> inválido",
-			"<atribuicao_chamada_modulo> inválido",
-			"Era esperado \"=\" ou \"(\"", //"<atribuicao_chamada_modulo1> inválido",
-			"<modulo> inválido",
-			"<tipo_modulo> inválido",
-			"<tipo> inválido",
-			"<lista_parametros> inválido",
-			"<parametros> inválido",
-			"Era esperado \",\" ou \")\"",//"<parametros1> inválido",
-			"Era esperado boolean,float,integer ou string",//"<parametro> inválido",
-			"Era esperado Identificador,do,end,if,print,println,scan,local,return",//"<variaveis_locais> inválido",
-			"Era esperado return ou end",//"<retorno> inválido",
-			"Era esperado boolean,float,integer ou string",//"<variaveis> inválido",
-			"Era esperado Identificador",//"<lista_identificadores> inválido",
-			"Era esperado \"=\",\",\",\";\" ou \"(\"",//"<lista_identificadores1> inválido",
-			"Era esperado \"=\" ou \";\"",//"<valor> inválido",
-			"Era esperado constate Inteira,constate float,constate string, false ou true",//"<constante> inválido",
-			"Era esperado \"=\"",//"<atribuicao> inválido",
-			"Era esperado scan",//"<entrada> inválido",
-			"Era esperado print ou println",//"<saida> inválido",
-			"Era esperado print",//"<print> inválido",
-			"Era esperado println",//"<println> inválido",
-			"Era esperado Identificador,Constante Inteira, constante float, constante string, \"+\",\"-\",\"!\",false,\"(\" ou true",//"<lista_expressoes> inválido",
-			"Era esperado expressão",//"<lista_expressoes1> inválido",
-			"Era esperado if",//"<selecao> inválido",
-			"Era esperado else ou end",//"<else> inválido",
-			"Era esperado do",//"<repeticao> inválido",
-			"Era esperado \"(\"",//"<chamada_modulo> inválido",
-			"Era esperado expressão",//"<parametros_reais> inválido",
-			"Era esperado expressão",//"<expressao> inválido",
-			"Era esperado expressão",//"<expressao1> inválido",
-			"Era esperado expressão",//"<elemento> inválido",
-			"Era esperado expressão",//"<relacional> inválido",
-			"Era esperado expressão",//"<relacional1> inválido",
-			"Era esperado expressão",//"<operador_relacional> inválido",
-			"Era esperado expressão",//"<aritmetica> inválido",
-			"Era esperado expressão",//"<aritmetica1> inválido",
-			"Era esperado expressão",//"<termo> inválido",
-			"Era esperado expressão",//"<termo1> inválido",
-			"Era esperado expressão",//"<fator> inválido",
-			"Era esperado expressão" //"<fator1> inválido"
+										"fim de programa", //"Era esperado fim de programa"
+										"identificador", //"Era esperado identificador"
+										"constante Integer", //"Era esperado constanteInteger"
+										"constante Float", //"Era esperado constanteFloat"
+										"constante String", //"Era esperado constanteString"
+										"\"+\"", //"Era esperado \"+\""
+										"\"-\"", //"Era esperado \"-\""
+										"\"*\"", //"Era esperado \"*\""
+										"\"/\"", //"Era esperado \"/\""
+										"\"=\"", //"Era esperado \"=\""
+										"\"&&\"", //"Era esperado \"&&\""
+										"\"||\"", //"Era esperado \"||\""
+										"\"!\"", //"Era esperado \"!\""
+										"\"==\"", //"Era esperado \"==\""
+										"\"!=\"", //"Era esperado \"!=\""
+										"\"<\"", //"Era esperado \"<\""
+										"\"<=\"", //"Era esperado \"<=\""
+										"\">\"", //"Era esperado \">\""
+										"\">=\"", //"Era esperado \">=\""
+										"\",\"", //"Era esperado \",\""
+										"\";\"", //"Era esperado \";\""
+										"\"(\"", //"Era esperado \"(\""
+										"\")\"", //"Era esperado \")\""
+										"boolean", //"Era esperado pr_boolean"
+										"do",      //"Era esperado pr_do",
+										"else",    //"Era esperado pr_else",
+										"end",     //"Era esperado pr_end",
+										"false",   //"Era esperado pr_false",
+										"float",   //"Era esperado pr_float",
+										"if",      //"Era esperado pr_if",
+										"integer", //"Era esperado pr_integer"
+										"main",    //"Era esperado pr_main",
+										"print",   //"Era esperado pr_print",
+										"println", //"Era esperado pr_println"
+										"scan",    //"Era esperado pr_scan",
+										"string",  //"Era esperado pr_string",
+										"true",    //"Era esperado pr_true",
+										"void",    //"Era esperado pr_void",
+										"while",   //"Era esperado pr_while",
+										"global",  //"Era esperado pr_global",
+										"local",   //"Era esperado pr_local",
+										"return",  //"Era esperado pr_return",
+										"main", //"<programa> inválido",
+										"identificador, boolean, do, end, float, if, integer, print, println, scan, string, void ou global", //"<variaveis_globais> inválido"
+										"identificador, boolean, do, end, float, if, integer, print, println, scan, string ou void", //"<lista_modulos> inválido"
+										"identificador, do, else, end, if, print, println, scan, while ou return", //"<lista_comandos> inválido"
+										"identificador, do, if, print, println ou scan", //"<comandos> inválido"
+										"identificador", //"<atribuicao_chamada_modulo> inválido"
+										"\"=\" ou \"(\"", //"<atribuicao_chamada_modulo1> inválido",
+										"boolean, float, integer, string ou void", //"<modulo> inválido"
+										"boolean, float, integer, string ou void", //"<tipo_modulo> inválido"
+										"boolean, float, integer ou string", //"<tipo> inválido"
+										"\")\", boolean, float, integer ou string", //"<lista_parametros> inválido"
+										"boolean, float, integer ou string", //"<parametros> inválido"
+										"\",\" ou \")\"",//"<parametros1> inválido",
+										"boolean, float, integer ou string",//"<parametro> inválido",
+										"identificador, do, end, if, print, println, scan, local, return",//"<variaveis_locais> inválido",
+										"return ou end",//"<retorno> inválido",
+										"boolean, float, integer ou string",//"<variaveis> inválido",
+										"identificador",//"<lista_identificadores> inválido",
+										"\"=\",\",\",\";\" ou \"(\"",//"<lista_identificadores1> inválido",
+										"\"=\" ou \";\"",//"<valor> inválido",
+										"constante Inteira, constante float, constante string, false ou true",//"<constante> inválido",
+										"\"=\"",//"<atribuicao> inválido",
+										"scan",//"<entrada> inválido",
+										"print ou println",//"<saida> inválido",
+										"print",//"<print> inválido",
+										"println",//"<println> inválido",
+										"expressão",//"<lista_expressoes> inválido",
+										"expressão",//"<lista_expressoes1> inválido",
+										"if",//"<selecao> inválido",
+										"else ou end",//"<else> inválido",
+										"do",//"<repeticao> inválido",
+										"\"(\"",//"<chamada_modulo> inválido",
+										"expressão",//"<parametros_reais> inválido",
+										"expressão",//"<expressao> inválido",
+										"expressão",//"<expressao1> inválido",
+										"expressão",//"<elemento> inválido",
+										"expressão",//"<relacional> inválido",
+										"expressão",//"<relacional1> inválido",
+										"expressão",//"<operador_relacional> inválido",
+										"expressão",//"<aritmetica> inválido",
+										"expressão",//"<aritmetica1> inválido",
+										"expressão",//"<termo> inválido",
+										"expressão",//"<termo1> inválido",
+										"expressão",//"<fator> inválido",
+										"expressão" //"<fator1> inválido"
 										};
 }

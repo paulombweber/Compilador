@@ -83,6 +83,12 @@ public class SyntaticalMessageTest {
 		executeAnalysis(program, "Era esperado \"=\" ou \"(\", encontrado: +");
 	}
 	
+	@Test
+	public void testScan() {
+		String program = "main print (\"digite um valor inteiro:\"); scan lado); area = lado * lado; println (area); end";
+		executeAnalysis(program, "Era esperado \"(\", encontrado: identificador (lado)");
+	}
+	
 	private void executeAnalysis(final String program, final String message){
 		try {
 			lexico.setInput(program);
