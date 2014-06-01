@@ -28,7 +28,7 @@ public class SyntaticalMessageTest {
 	@Test
 	public void testProgramaTokenFailed() {
 		String program = "programa xpto";
-		executeAnalysis(program, "Era esperado main, encontrado: programa");
+		executeAnalysis(program, "Era esperado main, encontrado: identificador (programa)");
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class SyntaticalMessageTest {
 	@Test
 	public void testFator1Invalido() {
 		String program = "main print(x x ++); end";
-		executeAnalysis(program, "Era esperado expressão, encontrado: x");
+		executeAnalysis(program, "Era esperado expressão, encontrado: identificador (x)");
 	}
 	
 	@Test
