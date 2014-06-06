@@ -2,10 +2,13 @@ package sintatico;
 
 import java.util.Stack;
 
-import lexico.Constants;
+import comum.Constants;
+import comum.Token;
+
+import semantico.SemanticError;
+import semantico.Semantico;
 import lexico.LexicalError;
 import lexico.Lexico;
-import lexico.Token;
 
 public class Sintatico implements Constants
 {

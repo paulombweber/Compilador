@@ -1,7 +1,7 @@
-package sintatico;
+package semantico;
 
-import lexico.Constants;
-import lexico.Token;
+import comum.Constants;
+import comum.Token;
 
 public class Semantico implements Constants
 {

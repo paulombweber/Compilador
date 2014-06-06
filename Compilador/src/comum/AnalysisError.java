@@ -1,4 +1,4 @@
-package lexico;
+package comum;
 
 public class AnalysisError extends Exception
 {

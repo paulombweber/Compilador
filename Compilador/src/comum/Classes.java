@@ -1,4 +1,4 @@
-package lexico;
+package comum;
 
 public enum Classes {
 	;

@@ -7,8 +7,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sintatico.SemanticError;
-import sintatico.Semantico;
+import semantico.SemanticError;
+import semantico.Semantico;
 import sintatico.Sintatico;
 import sintatico.SyntaticError;
 

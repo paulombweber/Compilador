@@ -1,6 +1,6 @@
-package sintatico;
+package semantico;
 
-import lexico.AnalysisError;
+import comum.AnalysisError;
 
 public class SemanticError extends AnalysisError
 {

@@ -1,6 +1,6 @@
 package sintatico;
 
-import lexico.AnalysisError;
+import comum.AnalysisError;
 
 public class SyntaticError extends AnalysisError
 {

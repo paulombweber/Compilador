@@ -1,4 +1,4 @@
-package sintatico;
+package comum;
 
 public interface ParserConstants {
 

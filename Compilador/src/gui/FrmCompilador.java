@@ -35,14 +35,15 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import sintatico.SemanticError;
-import sintatico.Semantico;
+import comum.Classes;
+import comum.Token;
+
+import semantico.SemanticError;
+import semantico.Semantico;
 import sintatico.Sintatico;
 import sintatico.SyntaticError;
-import lexico.Classes;
 import lexico.LexicalError;
 import lexico.Lexico;
-import lexico.Token;
 
 /**
  * @author Ailsson L. Hafemann

@@ -2,6 +2,9 @@ package lexico;
 
 import java.util.Stack;
 
+import comum.Constants;
+import comum.Token;
+
 public class Lexico implements Constants
 {
     private int position; // sempre será a próxima posição

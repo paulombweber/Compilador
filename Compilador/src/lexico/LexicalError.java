@@ -1,5 +1,7 @@
 package lexico;
 
+import comum.AnalysisError;
+
 public class LexicalError extends AnalysisError
 {
 

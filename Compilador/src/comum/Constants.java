@@ -1,6 +1,5 @@
-package lexico;
+package comum;
 
-import sintatico.ParserConstants;
 
 public interface Constants extends ScannerConstants, ParserConstants
 {
