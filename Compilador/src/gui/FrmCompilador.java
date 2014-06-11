@@ -379,7 +379,7 @@ public class FrmCompilador extends JFrame {
 		} else {
 			Lexico lexico = new Lexico();
 			Sintatico sintatico = new Sintatico();
-			Semantico semantico = new Semantico(nomeArquivo);
+			Semantico semantico = new Semantico(new File(nomeArquivo).getName());
 			lexico.setInput(taEditor.getText());
 			try {
 				sintatico.parse(lexico, semantico);

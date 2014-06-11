@@ -25,6 +25,8 @@ public class Semantico implements Constants {
 	private static final String CMD_IGUAL = "ceq";
 	private static final String CMD_TRUE = "ldc.i4.1";
 	private static final String CMD_FALSE = "ldc.i4.0";
+	private static final String CMD_OR = "or";
+	private static final String CMD_AND = "and";
 	private static final String CMD_XOR = "xor";
 	private static final String CMD_WRITE_INTEGER = "call void [mscorlib]System.Console::Write(int64)";
 	private static final String CMD_WRITE_FLOAT = "call void [mscorlib]System.Console::Write(float64)";
@@ -299,11 +301,11 @@ public class Semantico implements Constants {
 	}
 	
 	private void acao18() {
-		//TODO
+		adiciona(CMD_OR);
 	}
 	
 	private void acao19() {
-		//TODO
+		adiciona(CMD_AND);
 	}
 	
 	private void acao20() {
@@ -315,7 +317,7 @@ public class Semantico implements Constants {
 	}
 	
 	private void acao22() {
-		//TODO
+		adiciona(CMD_STRING);
 	}
 	
 	private void acao23() {
