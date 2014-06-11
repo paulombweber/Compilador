@@ -93,7 +93,7 @@ public class Semantico implements Constants {
 					acao15();
 					break;
 				case 16:
-					acao16(action);
+					acao16();
 					break;
 				case 17:
 					acao17();
@@ -288,7 +288,7 @@ public class Semantico implements Constants {
 		adiciona("     .entrypoint");
 	}
 
-	private void acao16(int action) {
+	private void acao16() {
 		adiciona("     ret");
 		adiciona("  }");
 		adiciona("}");
