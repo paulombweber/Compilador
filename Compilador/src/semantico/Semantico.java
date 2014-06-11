@@ -289,8 +289,6 @@ public class Semantico implements Constants {
 	}
 
 	private void acao16(int action) {
-		//TODO - paulo.weber - verificar o parâmetro null
-		JOptionPane.showMessageDialog(null, "Ação: " + String.valueOf(action) + " - reconhecimento de fim de programa");
 		adiciona("     ret");
 		adiciona("  }");
 		adiciona("}");
