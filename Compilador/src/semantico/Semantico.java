@@ -7,11 +7,8 @@ import comum.Token;
 
 public class Semantico implements Constants {
 	
-	private Stack<Integer> pilha = new Stack<>();
+	private Stack<TipoDado> pilha = new Stack<>();
 	private StringBuilder codigo = new StringBuilder();
-
-	private static final int TIPO_INTEGER = 5;
-	private static final int TIPO_FLOAT = 6;
 
 	private static final String CMD_ADD = "add";
 	private static final String CMD_SUB = "sub";
@@ -19,6 +16,15 @@ public class Semantico implements Constants {
 	private static final String CMD_DIV = "div";
 	private static final String CMD_INT = "ldc.i8 ";
 	private static final String CMD_FLOAT = "ldc.r8 ";
+	private static final String CMD_MENOR = "clt";
+	private static final String CMD_MAIOR = "cgt";
+	private static final String CMD_IGUAL = "ceq";
+	private static final String CMD_TRUE = "ldc.i4.1";
+	private static final String CMD_FALSE = "ldc.i4.1";
+	private static final String CMD_XOR = "xor";
+	private static final String CMD_WRITE_INTEGER = "call void [mscorlib]System.Console::Write(int64)";
+	private static final String CMD_WRITE_FLOAT = "call void [mscorlib]System.Console::Write(float64)";
+	private static final String CMD_WRITE_BOOLEAN = "call void [mscorlib]System.Console::Write(bool)";
 
 	public void executeAction(int action, Token token) throws SemanticError {
 		System.out.println("Ação #" + action + ", Token: " + token + ", Lexema: " + (token == null ? "null" : token.getLexeme()));
@@ -43,6 +49,27 @@ public class Semantico implements Constants {
 				case 6:
 					acao06(token);
 					break;
+				case 8:
+					acao08();
+					break;
+				case 9:
+					acao09();
+					break;
+				case 10:
+					acao10();
+					break;
+				case 11:
+					acao11();
+					break;
+				case 12:
+					acao12();
+					break;
+				case 13:
+					acao13();
+					break;
+				case 14:
+					acao14();
+					break;
 			}
 		} catch (Exception e) {
 			throw new SemanticError(e.getMessage(), token.getLine(), token.getPosition());
@@ -54,47 +81,47 @@ public class Semantico implements Constants {
 	}
 
 	private void acao01() {
-		int tipo1 = pilha.pop();
-		int tipo2 = pilha.pop();
+		TipoDado tipo1 = pilha.pop();
+		TipoDado tipo2 = pilha.pop();
 
-		if ((tipo1 == TIPO_FLOAT) || (tipo2 == TIPO_FLOAT)) {
-			pilha.push(TIPO_FLOAT);
+		if ((tipo1 == TipoDado.FLOAT) || (tipo2 == TipoDado.FLOAT)) {
+			pilha.push(TipoDado.FLOAT);
 		} else {
-			pilha.push(TIPO_INTEGER);
+			pilha.push(TipoDado.INTEGER);
 		}
 
 		adiciona(CMD_ADD);
 	}
 
 	private void acao02() {
-		int tipo1 = pilha.pop();
-		int tipo2 = pilha.pop();
+		TipoDado tipo1 = pilha.pop();
+		TipoDado tipo2 = pilha.pop();
 
-		if ((tipo1 == TIPO_FLOAT) || (tipo2 == TIPO_FLOAT)) {
-			pilha.push(TIPO_FLOAT);
+		if ((tipo1 == TipoDado.FLOAT) || (tipo2 == TipoDado.FLOAT)) {
+			pilha.push(TipoDado.FLOAT);
 		} else {
-			pilha.push(TIPO_INTEGER);
+			pilha.push(TipoDado.INTEGER);
 		}
 
 		adiciona(CMD_SUB);
 	}
 
 	private void acao03() {
-		int tipo1 = pilha.pop();
-		int tipo2 = pilha.pop();
+		TipoDado tipo1 = pilha.pop();
+		TipoDado tipo2 = pilha.pop();
 
-		if ((tipo1 == TIPO_FLOAT) || (tipo2 == TIPO_FLOAT)) {
-			pilha.push(TIPO_FLOAT);
+		if ((tipo1 == TipoDado.FLOAT) || (tipo2 == TipoDado.FLOAT)) {
+			pilha.push(TipoDado.FLOAT);
 		} else {
-			pilha.push(TIPO_INTEGER);
+			pilha.push(TipoDado.INTEGER);
 		}
 
 		adiciona(CMD_MUL);
 	}
 
 	private void acao04() throws SemanticError {
-		int tipo1 = pilha.pop();
-		int tipo2 = pilha.pop();
+		TipoDado tipo1 = pilha.pop();
+		TipoDado tipo2 = pilha.pop();
 
 		if (tipo1 == tipo2) {
 			pilha.push(tipo1);
@@ -105,14 +132,92 @@ public class Semantico implements Constants {
 	}
 	
 	private void acao05(Token token) {
-		pilha.push(TIPO_INTEGER);
+		pilha.push(TipoDado.INTEGER);
 		
 		adiciona(CMD_INT + token.getLexeme());
 	}
 	
 	private void acao06(Token token) {
-		pilha.push(TIPO_FLOAT);
+		pilha.push(TipoDado.FLOAT);
 		
 		adiciona(CMD_FLOAT + token.getLexeme());
+	}
+	
+	private void acao07() {
+		//TODO		
+	}
+	
+	private void acao08() throws SemanticError {
+		TipoDado tipo1 = pilha.pop();
+		TipoDado tipo2 = pilha.pop();
+		
+		if (tipo1 == tipo2) {
+			pilha.push(TipoDado.BOOLEAN);
+			adiciona(CMD_MENOR);
+		} else {
+			throw new SemanticError("Dados incompatíveis.");
+		}		
+	}
+	
+	private void acao09() throws SemanticError {
+		TipoDado tipo1 = pilha.pop();
+		TipoDado tipo2 = pilha.pop();
+		
+		if (tipo1 == tipo2) {
+			pilha.push(TipoDado.BOOLEAN);
+			adiciona(CMD_MAIOR);
+		} else {
+			throw new SemanticError("Dados incompatíveis.");
+		}		
+	}
+	
+	private void acao10() throws SemanticError {
+		TipoDado tipo1 = pilha.pop();
+		TipoDado tipo2 = pilha.pop();
+		
+		if (tipo1 == tipo2) {
+			pilha.push(TipoDado.BOOLEAN);
+			adiciona(CMD_IGUAL);
+		} else {
+			throw new SemanticError("Dados incompatíveis.");
+		}		
+	}
+	
+	private void acao11() {
+		pilha.add(TipoDado.BOOLEAN);
+		adiciona(CMD_TRUE);
+	}
+	
+	private void acao12() {
+		pilha.add(TipoDado.BOOLEAN);
+		adiciona(CMD_FALSE);
 	}	
+	
+	private void acao13() throws SemanticError {
+		TipoDado tipo = pilha.pop();
+		
+		if (tipo == TipoDado.BOOLEAN) {
+			pilha.push(TipoDado.BOOLEAN);
+			adiciona(CMD_TRUE);
+			adiciona(CMD_XOR);
+		} else {
+			throw new SemanticError("Dados incompatíveis.");
+		}
+	}
+	
+	private void acao14() {
+		TipoDado tipo = pilha.pop();
+		
+		switch (tipo) {
+			case INTEGER: 
+				adiciona(CMD_WRITE_INTEGER);
+				break;
+			case FLOAT:
+				adiciona(CMD_WRITE_FLOAT);
+				break;
+			case BOOLEAN:
+				adiciona(CMD_WRITE_BOOLEAN);
+				break;
+		}
+	}
 }
