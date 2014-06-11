@@ -2,6 +2,8 @@ package semantico;
 
 import java.util.Stack;
 
+import javax.swing.JOptionPane;
+
 import comum.Constants;
 import comum.Token;
 
@@ -9,6 +11,7 @@ public class Semantico implements Constants {
 	
 	private Stack<TipoDado> pilha = new Stack<>();
 	private StringBuilder codigo = new StringBuilder();
+	private String fileName;
 
 	private static final String CMD_ADD = "add";
 	private static final String CMD_SUB = "sub";
@@ -16,6 +19,7 @@ public class Semantico implements Constants {
 	private static final String CMD_DIV = "div";
 	private static final String CMD_INT = "ldc.i8 ";
 	private static final String CMD_FLOAT = "ldc.r8 ";
+	private static final String CMD_STRING = "ldstr ";
 	private static final String CMD_MENOR = "clt";
 	private static final String CMD_MAIOR = "cgt";
 	private static final String CMD_IGUAL = "ceq";
@@ -25,7 +29,17 @@ public class Semantico implements Constants {
 	private static final String CMD_WRITE_INTEGER = "call void [mscorlib]System.Console::Write(int64)";
 	private static final String CMD_WRITE_FLOAT = "call void [mscorlib]System.Console::Write(float64)";
 	private static final String CMD_WRITE_BOOLEAN = "call void [mscorlib]System.Console::Write(bool)";
+	private static final String CMD_WRITE_STRING = "call void [mscorlib]System.Console::Write(string)"; 
 
+	public Semantico(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+	
 	public void executeAction(int action, Token token) throws SemanticError {
 		System.out.println("Ação #" + action + ", Token: " + token + ", Lexema: " + (token == null ? "null" : token.getLexeme()));
 
@@ -77,7 +91,7 @@ public class Semantico implements Constants {
 					acao15();
 					break;
 				case 16:
-					acao16();
+					acao16(action);
 					break;
 				case 17:
 					acao17();
@@ -244,30 +258,44 @@ public class Semantico implements Constants {
 	
 	private void acao14() {
 		TipoDado tipo = pilha.pop();
-		
+
 		switch (tipo) {
-			case INTEGER: 
-				adiciona(CMD_WRITE_INTEGER);
-				break;
-			case FLOAT:
-				adiciona(CMD_WRITE_FLOAT);
-				break;
-			case BOOLEAN:
-				adiciona(CMD_WRITE_BOOLEAN);
-				break;
+		case INTEGER:
+			adiciona(CMD_WRITE_INTEGER);
+			break;
+		case FLOAT:
+			adiciona(CMD_WRITE_FLOAT);
+			break;
+		case BOOLEAN:
+			adiciona(CMD_WRITE_BOOLEAN);
+			break;
+		case STRING:
+			adiciona(CMD_WRITE_STRING);
+			break;
 		}
 	}
-	
+
 	private void acao15() {
-		//TODO
+		adiciona(".assembly extern mscorlib{}");
+		adiciona(".assembly " + getFileName() + "{}");
+		adiciona(".module " + getFileName() + ".exe");
+		adiciona("");
+		adiciona(".class public " + getFileName() + " {");
+		adiciona("  .method public static void _principal ()");
+		adiciona("  {");
+		adiciona("     .entrypoint");
 	}
-	
-	private void acao16() {
-		//TODO
+
+	private void acao16(int action) {
+		//TODO - paulo.weber - verificar o parâmetro null
+		JOptionPane.showMessageDialog(null, "Ação: " + String.valueOf(action) + " - reconhecimento de fim de programa");
+		adiciona("     ret");
+		adiciona("  }");
+		adiciona("}");
 	}
-	
+
 	private void acao17() {
-		//TODO
+		adiciona(CMD_STRING + "\\n");
 	}
 	
 	private void acao18() {

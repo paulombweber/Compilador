@@ -4,6 +4,7 @@ public enum TipoDado {
 	
 	INTEGER,
 	FLOAT,
-	BOOLEAN;
+	BOOLEAN,
+	STRING;
 
 }
