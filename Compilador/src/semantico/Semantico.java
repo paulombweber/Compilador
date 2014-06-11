@@ -20,7 +20,7 @@ public class Semantico implements Constants {
 	private static final String CMD_MAIOR = "cgt";
 	private static final String CMD_IGUAL = "ceq";
 	private static final String CMD_TRUE = "ldc.i4.1";
-	private static final String CMD_FALSE = "ldc.i4.1";
+	private static final String CMD_FALSE = "ldc.i4.0";
 	private static final String CMD_XOR = "xor";
 	private static final String CMD_WRITE_INTEGER = "call void [mscorlib]System.Console::Write(int64)";
 	private static final String CMD_WRITE_FLOAT = "call void [mscorlib]System.Console::Write(float64)";
@@ -48,7 +48,10 @@ public class Semantico implements Constants {
 					break;
 				case 6:
 					acao06(token);
-					break;
+					break;					
+				case 7:
+					acao07();
+					break;					
 				case 8:
 					acao08();
 					break;
@@ -170,8 +173,15 @@ public class Semantico implements Constants {
 		adiciona(CMD_FLOAT + token.getLexeme());
 	}
 	
-	private void acao07() {
-		//TODO		
+	private void acao07() throws SemanticError {
+		TipoDado tipo = pilha.peek();
+		
+		if ((tipo == TipoDado.INTEGER) || (tipo == TipoDado.FLOAT)) {
+			adiciona(CMD_INT + "-1");
+			adiciona(CMD_MUL);
+		} else {
+			throw new SemanticError("Dados incompatíveis."); 
+		}				
 	}
 	
 	private void acao08() throws SemanticError {
