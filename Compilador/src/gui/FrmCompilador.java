@@ -379,11 +379,12 @@ public class FrmCompilador extends JFrame {
 		} else {
 			Lexico lexico = new Lexico();
 			Sintatico sintatico = new Sintatico();
-			Semantico semantico = new Semantico(new File(nomeArquivo).getName());
+			Semantico semantico = new Semantico(nomeArquivo.equals("") ? "untitled" : new File(nomeArquivo).getName());
 			lexico.setInput(taEditor.getText());
 			try {
 				sintatico.parse(lexico, semantico);
 			    imprimirMensagem("programa compilado com sucesso");
+			    imprimirMensagem(semantico.getCodigo());
 			} catch (LexicalError | SyntaticError | SemanticError e) {
 				String mensagem = "Erro na linha " + e.getLine() + " - ";
 				if ((e instanceof LexicalError) && (((LexicalError) e).getState() == 0)) {

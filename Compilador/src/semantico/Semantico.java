@@ -42,6 +42,10 @@ public class Semantico implements Constants {
 		return fileName;
 	}
 	
+	public String getCodigo() {
+		return codigo.toString();
+	}
+	
 	public void executeAction(int action, Token token) throws SemanticError {
 		System.out.println("Ação #" + action + ", Token: " + token + ", Lexema: " + (token == null ? "null" : token.getLexeme()));
 
@@ -295,7 +299,8 @@ public class Semantico implements Constants {
 	}
 
 	private void acao17() {
-		adiciona(CMD_STRING + "\\n");
+		adiciona(CMD_STRING + "\"\\n\"");
+		adiciona(CMD_WRITE_STRING);
 	}
 	
 	private void acao18() {
