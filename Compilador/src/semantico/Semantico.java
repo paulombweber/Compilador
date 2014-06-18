@@ -2,8 +2,6 @@ package semantico;
 
 import java.util.Stack;
 
-import javax.swing.JOptionPane;
-
 import comum.Constants;
 import comum.Token;
 
@@ -11,7 +9,7 @@ public class Semantico implements Constants {
 	
 	private Stack<TipoDado> pilha = new Stack<>();
 	private StringBuilder codigo = new StringBuilder();
-	private String fileName;
+	private String fileName;	
 
 	private static final String CMD_ADD = "add";
 	private static final String CMD_SUB = "sub";
@@ -28,6 +26,7 @@ public class Semantico implements Constants {
 	private static final String CMD_OR = "or";
 	private static final String CMD_AND = "and";
 	private static final String CMD_XOR = "xor";
+	private static final String CMD_NOT = CMD_TRUE + "\n" + CMD_XOR;
 	private static final String CMD_WRITE_INTEGER = "call void [mscorlib]System.Console::Write(int64)";
 	private static final String CMD_WRITE_FLOAT = "call void [mscorlib]System.Console::Write(float64)";
 	private static final String CMD_WRITE_BOOLEAN = "call void [mscorlib]System.Console::Write(bool)";
@@ -70,16 +69,7 @@ public class Semantico implements Constants {
 					acao06(token);
 					break;					
 				case 7:
-					acao07();
-					break;					
-				case 8:
-					acao08();
-					break;
-				case 9:
-					acao09();
-					break;
-				case 10:
-					acao10();
+					acao07();				
 					break;
 				case 11:
 					acao11();
@@ -109,13 +99,13 @@ public class Semantico implements Constants {
 					acao19();
 					break;
 				case 20:
-					acao20();
+					acao20(token);
 					break;
 				case 21:
 					acao21();
 					break;
 				case 22:
-					acao22();
+					acao22(token);
 					break;
 				case 23:
 					acao23();
@@ -226,43 +216,7 @@ public class Semantico implements Constants {
 		} else {
 			throw new SemanticError("Dados incompatíveis."); 
 		}				
-	}
-	
-	private void acao08() throws SemanticError {
-		TipoDado tipo1 = pilha.pop();
-		TipoDado tipo2 = pilha.pop();
-		
-		if (tipo1 == tipo2) {
-			pilha.push(TipoDado.BOOLEAN);
-			adiciona(CMD_MENOR);
-		} else {
-			throw new SemanticError("Dados incompatíveis.");
-		}		
-	}
-	
-	private void acao09() throws SemanticError {
-		TipoDado tipo1 = pilha.pop();
-		TipoDado tipo2 = pilha.pop();
-		
-		if (tipo1 == tipo2) {
-			pilha.push(TipoDado.BOOLEAN);
-			adiciona(CMD_MAIOR);
-		} else {
-			throw new SemanticError("Dados incompatíveis.");
-		}		
-	}
-	
-	private void acao10() throws SemanticError {
-		TipoDado tipo1 = pilha.pop();
-		TipoDado tipo2 = pilha.pop();
-		
-		if (tipo1 == tipo2) {
-			pilha.push(TipoDado.BOOLEAN);
-			adiciona(CMD_IGUAL);
-		} else {
-			throw new SemanticError("Dados incompatíveis.");
-		}		
-	}
+	}	
 	
 	private void acao11() {
 		pilha.add(TipoDado.BOOLEAN);
@@ -278,9 +232,8 @@ public class Semantico implements Constants {
 		TipoDado tipo = pilha.pop();
 		
 		if (tipo == TipoDado.BOOLEAN) {
-			pilha.push(TipoDado.BOOLEAN);
-			adiciona(CMD_TRUE);
-			adiciona(CMD_XOR);
+			pilha.push(TipoDado.BOOLEAN);			
+			adiciona(CMD_NOT);
 		} else {
 			throw new SemanticError("Dados incompatíveis.");
 		}
@@ -335,16 +288,53 @@ public class Semantico implements Constants {
 		adiciona(CMD_AND);
 	}
 	
-	private void acao20() {
-		//TODO
+	private String operador;
+	
+	private void acao20(Token token) {
+		operador = token.getLexeme().trim();
+	}
+		
+	private void acao21() throws SemanticError {
+		TipoDado tipo1 = pilha.pop();
+		TipoDado tipo2 = pilha.pop();
+		
+		if (tipo1 == tipo2) {
+			switch (operador) {
+			case "==":
+				adiciona(CMD_IGUAL);
+				break;
+			case "!=":
+				adiciona(CMD_IGUAL);
+				adiciona(CMD_NOT);
+				break;
+			case "<":
+				adiciona(CMD_MENOR);
+				break;
+			case "<=":
+				adiciona(CMD_MAIOR);
+				adiciona(CMD_FALSE);
+				adiciona(CMD_IGUAL);
+				break;
+			case ">":
+				adiciona(CMD_MAIOR);
+				break;
+			case ">=":
+				adiciona(CMD_MENOR);
+				adiciona(CMD_FALSE);
+				adiciona(CMD_IGUAL);				
+				break;
+			default: 
+				throw new SemanticError("Operador inválido.");
+			}
+			pilha.push(TipoDado.BOOLEAN);			
+		} else {
+			throw new SemanticError("Dados incompatíveis.");
+		}		
 	}
 	
-	private void acao21() {
-		//TODO
-	}
-	
-	private void acao22() {
-		adiciona(CMD_STRING);
+	private void acao22(Token token) {
+		pilha.push(TipoDado.STRING);
+		adiciona(CMD_STRING + token.getLexeme());		
 	}
 	
 	private void acao23() {
