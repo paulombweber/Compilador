@@ -1,15 +1,23 @@
 package semantico;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import comum.Constants;
 import comum.Token;
+import comum.Variavel;
 
 public class Semantico implements Constants {
-	
+
 	private Stack<TipoDado> pilha = new Stack<>();
 	private StringBuilder codigo = new StringBuilder();
-	private String fileName;	
+	private String fileName;
+	private List<String> ids = new ArrayList<>();
+	private Map<String, Variavel> variaveis = new HashMap<>();
+	private TipoDado tipoTemp;
 
 	private static final String CMD_ADD = "add";
 	private static final String CMD_SUB = "sub";
@@ -30,7 +38,11 @@ public class Semantico implements Constants {
 	private static final String CMD_WRITE_INTEGER = "call void [mscorlib]System.Console::Write(int64)";
 	private static final String CMD_WRITE_FLOAT = "call void [mscorlib]System.Console::Write(float64)";
 	private static final String CMD_WRITE_BOOLEAN = "call void [mscorlib]System.Console::Write(bool)";
-	private static final String CMD_WRITE_STRING = "call void [mscorlib]System.Console::Write(string)"; 
+	private static final String CMD_WRITE_STRING = "call void [mscorlib]System.Console::Write(string)";
+	private static final String CMD_VAR_INT = "int64";
+	private static final String CMD_VAR_FLOAT = "float64";
+	private static final String CMD_VAR_BOOL = "bool";
+	private static final String CMD_VAR_STRING = "string";
 
 	public Semantico(String fileName) {
 		super();
@@ -40,103 +52,105 @@ public class Semantico implements Constants {
 	public String getFileName() {
 		return fileName;
 	}
-	
+
 	public String getCodigo() {
 		return codigo.toString();
 	}
-	
+
 	public void executeAction(int action, Token token) throws SemanticError {
-		System.out.println("Ação #" + action + ", Token: " + token + ", Lexema: " + (token == null ? "null" : token.getLexeme()));
+		System.out.println("Ação #" + action + ", Token: " + token
+				+ ", Lexema: " + (token == null ? "null" : token.getLexeme()));
 
 		try {
 			switch (action) {
-				case 1:
-					acao01();
-					break;
-				case 2:
-					acao02();
-					break;
-				case 3:
-					acao03();
-					break;
-				case 4:
-					acao04();
-					break;
-				case 5: 
-					acao05(token);
-					break;
-				case 6:
-					acao06(token);
-					break;					
-				case 7:
-					acao07();				
-					break;
-				case 11:
-					acao11();
-					break;
-				case 12:
-					acao12();
-					break;
-				case 13:
-					acao13();
-					break;
-				case 14:
-					acao14();
-					break;
-				case 15:
-					acao15();
-					break;
-				case 16:
-					acao16();
-					break;
-				case 17:
-					acao17();
-					break;
-				case 18:
-					acao18();
-					break;
-				case 19:
-					acao19();
-					break;
-				case 20:
-					acao20(token);
-					break;
-				case 21:
-					acao21();
-					break;
-				case 22:
-					acao22(token);
-					break;
-				case 23:
-					acao23();
-					break;
-				case 24:
-					acao24();
-					break;
-				case 25:
-					acao25();
-					break;
-				case 26:
-					acao26();
-					break;
-				case 27:
-					acao27();
-					break;
-				case 28:
-					acao28();
-					break;
-				case 29:
-					acao29();
-					break;
-				case 30:
-					acao30();
-					break;
-				case 31:
-					acao31();
-					break;
+			case 1:
+				acao01();
+				break;
+			case 2:
+				acao02();
+				break;
+			case 3:
+				acao03();
+				break;
+			case 4:
+				acao04();
+				break;
+			case 5:
+				acao05(token);
+				break;
+			case 6:
+				acao06(token);
+				break;
+			case 7:
+				acao07();
+				break;
+			case 11:
+				acao11();
+				break;
+			case 12:
+				acao12();
+				break;
+			case 13:
+				acao13();
+				break;
+			case 14:
+				acao14();
+				break;
+			case 15:
+				acao15();
+				break;
+			case 16:
+				acao16();
+				break;
+			case 17:
+				acao17();
+				break;
+			case 18:
+				acao18();
+				break;
+			case 19:
+				acao19();
+				break;
+			case 20:
+				acao20(token);
+				break;
+			case 21:
+				acao21();
+				break;
+			case 22:
+				acao22(token);
+				break;
+			case 23:
+				acao23();
+				break;
+			case 24:
+				acao24(token);
+				break;
+			case 25:
+				acao25(token);
+				break;
+			case 26:
+				acao26();
+				break;
+			case 27:
+				acao27();
+				break;
+			case 28:
+				acao28();
+				break;
+			case 29:
+				acao29();
+				break;
+			case 30:
+				acao30();
+				break;
+			case 31:
+				acao31();
+				break;
 			}
 		} catch (Exception e) {
-			throw new SemanticError(e.getMessage(), token.getLine(), token.getPosition());
+			throw new SemanticError(e.getMessage(), token.getLine(),
+					token.getPosition());
 		}
 	}
 
@@ -194,51 +208,51 @@ public class Semantico implements Constants {
 			throw new SemanticError("Dados incompatíveis para divisão.");
 		}
 	}
-	
+
 	private void acao05(Token token) {
 		pilha.push(TipoDado.INTEGER);
-		
+
 		adiciona(CMD_INT + token.getLexeme());
 	}
-	
+
 	private void acao06(Token token) {
 		pilha.push(TipoDado.FLOAT);
-		
+
 		adiciona(CMD_FLOAT + token.getLexeme());
 	}
-	
+
 	private void acao07() throws SemanticError {
 		TipoDado tipo = pilha.peek();
-		
+
 		if ((tipo == TipoDado.INTEGER) || (tipo == TipoDado.FLOAT)) {
 			adiciona(CMD_INT + "-1");
 			adiciona(CMD_MUL);
 		} else {
-			throw new SemanticError("Dados incompatíveis."); 
-		}				
-	}	
-	
+			throw new SemanticError("Dados incompatíveis.");
+		}
+	}
+
 	private void acao11() {
 		pilha.add(TipoDado.BOOLEAN);
 		adiciona(CMD_TRUE);
 	}
-	
+
 	private void acao12() {
 		pilha.add(TipoDado.BOOLEAN);
 		adiciona(CMD_FALSE);
-	}	
-	
+	}
+
 	private void acao13() throws SemanticError {
 		TipoDado tipo = pilha.pop();
-		
+
 		if (tipo == TipoDado.BOOLEAN) {
-			pilha.push(TipoDado.BOOLEAN);			
+			pilha.push(TipoDado.BOOLEAN);
 			adiciona(CMD_NOT);
 		} else {
 			throw new SemanticError("Dados incompatíveis.");
 		}
 	}
-	
+
 	private void acao14() {
 		TipoDado tipo = pilha.pop();
 
@@ -279,25 +293,25 @@ public class Semantico implements Constants {
 		adiciona(CMD_STRING + "\"\\n\"");
 		adiciona(CMD_WRITE_STRING);
 	}
-	
+
 	private void acao18() {
 		adiciona(CMD_OR);
 	}
-	
+
 	private void acao19() {
 		adiciona(CMD_AND);
 	}
-	
+
 	private String operador;
-	
+
 	private void acao20(Token token) {
 		operador = token.getLexeme().trim();
 	}
-		
+
 	private void acao21() throws SemanticError {
 		TipoDado tipo1 = pilha.pop();
 		TipoDado tipo2 = pilha.pop();
-		
+
 		if (tipo1 == tipo2) {
 			switch (operador) {
 			case "==":
@@ -321,55 +335,81 @@ public class Semantico implements Constants {
 			case ">=":
 				adiciona(CMD_MENOR);
 				adiciona(CMD_FALSE);
-				adiciona(CMD_IGUAL);				
+				adiciona(CMD_IGUAL);
 				break;
-			default: 
+			default:
 				throw new SemanticError("Operador inválido.");
 			}
-			pilha.push(TipoDado.BOOLEAN);			
+			pilha.push(TipoDado.BOOLEAN);
 		} else {
 			throw new SemanticError("Dados incompatíveis.");
-		}		
+		}
 	}
-	
+
 	private void acao22(Token token) {
 		pilha.push(TipoDado.STRING);
-		adiciona(CMD_STRING + token.getLexeme());		
+		adiciona(CMD_STRING + token.getLexeme());
 	}
-	
+
 	private void acao23() {
-		//TODO
+		// TODO
 	}
-	
-	private void acao24() {
-		//TODO
+
+	private void acao24(Token token) {
+		tipoTemp = TipoDado.fromString(token.getLexeme());
 	}
-	
-	private void acao25() {
-		//TODO
+
+	private void acao25(Token token) {
+		adiciona(token.getLexeme());
+		ids.add(token.getLexeme());
 	}
-	
-	private void acao26() {
-		//TODO
+
+	private void acao26() throws SemanticError {
+		for (String id : ids) {
+			if (!variaveis.containsKey(id)) {
+				variaveis.put(id, new Variavel(tipoTemp, id));
+			} else {
+				throw new SemanticError("Identificado " + id
+						+ " foi redeclarado.");
+			}
+
+			String xMsg = "";
+			switch (tipoTemp) {
+			case INTEGER:
+				xMsg = CMD_VAR_INT;
+				break;
+			case FLOAT:
+				xMsg = CMD_VAR_FLOAT;
+				break;
+			case BOOLEAN:
+				xMsg = CMD_VAR_BOOL;
+				break;
+			case STRING:
+				xMsg = CMD_VAR_STRING;
+				break;
+			}
+			adiciona(".locals (" + xMsg + " " + id + ")");
+		}
+		tipoTemp = null;
 	}
-	
+
 	private void acao27() {
-		//TODO
+		// TODO
 	}
-	
+
 	private void acao28() {
-		//TODO
+		// TODO
 	}
-	
+
 	private void acao29() {
-		//TODO
+		// TODO
 	}
-	
+
 	private void acao30() {
-		//TODO
+		// TODO
 	}
-	
+
 	private void acao31() {
-		//TODO
+		// TODO
 	}
 }
