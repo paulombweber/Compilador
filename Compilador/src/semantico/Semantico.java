@@ -120,6 +120,30 @@ public class Semantico implements Constants {
 				case 23:
 					acao23();
 					break;
+				case 24:
+					acao24();
+					break;
+				case 25:
+					acao25();
+					break;
+				case 26:
+					acao26();
+					break;
+				case 27:
+					acao27();
+					break;
+				case 28:
+					acao28();
+					break;
+				case 29:
+					acao29();
+					break;
+				case 30:
+					acao30();
+					break;
+				case 31:
+					acao31();
+					break;
 			}
 		} catch (Exception e) {
 			throw new SemanticError(e.getMessage(), token.getLine(), token.getPosition());
@@ -324,6 +348,38 @@ public class Semantico implements Constants {
 	}
 	
 	private void acao23() {
+		//TODO
+	}
+	
+	private void acao24() {
+		//TODO
+	}
+	
+	private void acao25() {
+		//TODO
+	}
+	
+	private void acao26() {
+		//TODO
+	}
+	
+	private void acao27() {
+		//TODO
+	}
+	
+	private void acao28() {
+		//TODO
+	}
+	
+	private void acao29() {
+		//TODO
+	}
+	
+	private void acao30() {
+		//TODO
+	}
+	
+	private void acao31() {
 		//TODO
 	}
 }

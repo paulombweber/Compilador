@@ -155,7 +155,7 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 <lista_modulos>::= î | <modulo> <lista_modulos>;
 <lista_comandos>::= î | <comandos> <lista_comandos>;
 <comandos>::= <atribuicao_chamada_modulo> | <entrada> | <saida> | <selecao> | <repeticao>;
-<atribuicao_chamada_modulo>::= identificador <atribuicao_chamada_modulo1>;
+<atribuicao_chamada_modulo>::= identificador #25 <atribuicao_chamada_modulo1>;
 <atribuicao_chamada_modulo1>::= <atribuicao> | <chamada_modulo>;
 
 //forma geral do módulo
@@ -170,17 +170,17 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 <retorno>::= î | pr_return <expressao> ";";
 
 //forma geral de variáveis
-<variaveis>::= <tipo> <lista_identificadores> <valor> ";";
-<lista_identificadores>::= identificador <lista_identificadores1>;
+<variaveis>::= <tipo> #24 <lista_identificadores> #26 <valor> ";";
+<lista_identificadores>::= identificador #25 <lista_identificadores1>;
 <lista_identificadores1>::= î | "," <lista_identificadores>;
-<valor>::= î | "=" <constante>;
+<valor>::= î | "=" <constante> #30;
 <constante>::= constanteInteger | constanteFloat | constanteString | pr_true | pr_false;
 
 //forma geral do comando de atribuicao
-<atribuicao>::= "=" <expressao> ";";
+<atribuicao>::= "=" <expressao> #29 ";";
 
 //forma geral do comando de entrada de dados
-<entrada>::= pr_scan "(" <lista_identificadores> ")" ";";
+<entrada>::= pr_scan "(" <lista_identificadores> #27 ")" ";";
 
 //forma geral dos comandos de saída de dados
 <saida>::= <print> | <println>;
@@ -190,11 +190,11 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 <lista_expressoes1>::= î | "," <lista_expressoes>;
 
 //forma geral do comando de seleção
-<selecao>::= pr_if "(" <expressao> ")" <lista_comandos> <else> pr_end ";";
-<else>::= î | pr_else <lista_comandos>;
+<selecao>::= pr_if "(" <expressao> ")" #31 <lista_comandos> <else> pr_end #32 ";";
+<else>::= î | pr_else #33 <lista_comandos>;
 
 //forma geral do comando de repetição
-<repeticao>::= pr_do <lista_comandos> pr_while "(" <expressao> ")" ";";
+<repeticao>::= pr_do #34 <lista_comandos> pr_while "(" <expressao> ")" #35 ";";
 
 //forma geral da chamada de um módulo
 <chamada_modulo>::= "(" <parametros_reais> ")" ";";
@@ -218,4 +218,4 @@ comentarioBloco: {chaveAbre}[^}]*{chaveFecha}
 	"(" <expressao> ")" | 
 	"+" <fator> #23 | 
 	"-" <fator> #7;
-<fator1>::= î | "(" <lista_expressoes> ")";
+<fator1>::= î #28 | "(" <lista_expressoes> ")";
