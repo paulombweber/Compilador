@@ -394,14 +394,54 @@ public class Semantico implements Constants {
 	}
 
 	private void acao27() {
+		/**
+		 * Para i = 1 ate lista.size
+		 * id = lista.retira
+		 * Se não tabelaSimbolos.existe(ID)
+		 *   Erro semantico
+		 * fim
+		 * Verificar se não é id de "programa"
+		 * Tipo = TabelaSimbolo.RecuperaTipo(id)  
+		 * codigo.adiciona("Call string.....readline()")
+		 * codigo.adiciona("Call string.....Parse(String)")//Só é necessario se não for String
+		 * codigo.adicina(stloc id)
+		 * fim
+		 */
 		// TODO
 	}
 
 	private void acao28() {
+		/**
+		 * id = token.getLexema
+		 * Se não TabelaSimbolo.existe(id)
+		 *   Erro semantico
+		 * fim
+		 * \\Verifica se não é id de "Programa"
+		 * Tipo = TabelaSimbolo.recuperaTipo(id)
+		 * pilha.empilha(tipo)
+		 * codigo.adiciona(ldLoc id)
+		 */
 		// TODO
 	}
 
 	private void acao29() {
+		/**
+		 * id = lista.retira
+		 * Se não tabelaSimbolo.existe(id)
+		 *   erro semantico
+		 * fim
+		 * \\Verifica se não é id de "Programa"
+		 *\\ Tipo da expressao
+		 *   tipo1=pilha.desenpilha
+		 *\\tipo id
+		 *  tipo2 = tabelaSimbolo.recuperaTipo(id)
+		 *  
+		 *  Se tipo1 != tipo2
+		 *    erro semantico
+		 *  fim
+		 *  codigo.adiciona(stloc id).  
+		 *   
+		 */
 		// TODO
 	}
 
