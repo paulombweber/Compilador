@@ -136,7 +136,7 @@ public class Semantico implements Constants {
 				acao27();
 				break;
 			case 28:
-				acao28();
+				acao28(token);
 				break;
 			case 29:
 				acao29();
@@ -156,6 +156,21 @@ public class Semantico implements Constants {
 
 	private void adiciona(String comando) {
 		codigo.append(comando + "\n");
+	}
+	
+	private String retornaTipo(TipoDado tipo){
+		switch (tipo) {
+		case INTEGER:
+			return CMD_VAR_INT;
+		case FLOAT:
+			return CMD_VAR_FLOAT;
+		case BOOLEAN:
+			return CMD_VAR_BOOL;
+		case STRING:
+			return CMD_VAR_STRING;
+		}
+		return null;
+
 	}
 
 	private void acao01() {
@@ -374,26 +389,13 @@ public class Semantico implements Constants {
 			}
 
 			String xMsg = "";
-			switch (tipoTemp) {
-			case INTEGER:
-				xMsg = CMD_VAR_INT;
-				break;
-			case FLOAT:
-				xMsg = CMD_VAR_FLOAT;
-				break;
-			case BOOLEAN:
-				xMsg = CMD_VAR_BOOL;
-				break;
-			case STRING:
-				xMsg = CMD_VAR_STRING;
-				break;
-			}
+			xMsg = retornaTipo(tipoTemp);
 			adiciona(".locals (" + xMsg + " " + id + ")");
 		}
 		tipoTemp = null;
 	}
 
-	private void acao27() {
+	private void acao27() throws SemanticError {
 		/**
 		 * Para i = 1 ate lista.size
 		 * id = lista.retira
@@ -407,10 +409,21 @@ public class Semantico implements Constants {
 		 * codigo.adicina(stloc id)
 		 * fim
 		 */
-		// TODO
+		for (String id : ids) {
+			if (!variaveis.containsKey(id)) {
+				throw new SemanticError("Identificado " + id
+						+ " foi redeclarado.");
+			}
+			String tipo = retornaTipo(variaveis.get(id).getTipo());
+			adiciona("Call string [mscolorlib]System.Console::ReadLine()");
+			if(tipo != "string"){
+				adiciona("Call "+ tipo +" [mscolorlib]System."+ tipo +"::Parse(string)");	
+			}
+			adiciona("stloc " + id);
+		}
 	}
 
-	private void acao28() {
+	private void acao28(Token token) throws SemanticError {
 		/**
 		 * id = token.getLexema
 		 * Se não TabelaSimbolo.existe(id)
@@ -421,10 +434,18 @@ public class Semantico implements Constants {
 		 * pilha.empilha(tipo)
 		 * codigo.adiciona(ldLoc id)
 		 */
-		// TODO
+		String id = token.getLexeme();
+		if(!variaveis.containsKey(id)){
+			throw new SemanticError("Identificado " + id
+					+ " foi redeclarado.");
+		}
+		String tipo = retornaTipo(variaveis.get(id).getTipo());
+		pilha.push(variaveis.get(id).getTipo());
+		adiciona("ldloc " + id);
+		
 	}
 
-	private void acao29() {
+	private void acao29() throws SemanticError {
 		/**
 		 * id = lista.retira
 		 * Se não tabelaSimbolo.existe(id)
@@ -442,7 +463,19 @@ public class Semantico implements Constants {
 		 *  codigo.adiciona(stloc id).  
 		 *   
 		 */
-		// TODO
+		for(String id: ids){
+			if(!variaveis.containsKey(id)){
+				throw new SemanticError("Identificado " + id
+						+ " foi redeclarado.");
+			}
+			TipoDado tipo1 = pilha.pop();
+			TipoDado tipo2 = variaveis.get(id).getTipo();
+			if(tipo1 != tipo2){
+				throw new SemanticError("Tipo incompativel " + tipo1
+						+ " com " + tipo2);
+			}
+			adiciona("stloc " + id);
+		}
 	}
 
 	private void acao30() {
