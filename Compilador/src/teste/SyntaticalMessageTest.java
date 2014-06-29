@@ -22,7 +22,7 @@ public class SyntaticalMessageTest {
 	public static void beforeClass() {
 		lexico = new Lexico();
 		sintatico = new Sintatico();
-		semantico = new Semantico("teste");
+		semantico = new Semantico();
 	}
 	
 	@Test

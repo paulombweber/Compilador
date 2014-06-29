@@ -14,7 +14,6 @@ public class Semantico implements Constants {
 
 	private Stack<TipoDado> pilha = new Stack<>();
 	private StringBuilder codigo = new StringBuilder();
-	private String fileName;
 	private List<String> ids = new ArrayList<>();
 	private Map<String, Variavel> variaveis = new HashMap<>();
 	private TipoDado tipoTemp;
@@ -44,17 +43,10 @@ public class Semantico implements Constants {
 	private static final String CMD_VAR_BOOL = "bool";
 	private static final String CMD_VAR_STRING = "string";
 
-	public Semantico(String fileName) {
-		super();
-		this.fileName = fileName;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public String getCodigo() {
-		return codigo.toString();
+	private static final String NOME_PROGRAMA = "<#NOME_PROGRAMA#>";
+	
+	public String getCodigo(String nomePrograma) {
+		return codigo.toString().replaceAll(NOME_PROGRAMA, nomePrograma);
 	}
 
 	public void executeAction(int action, Token token) throws SemanticError {
@@ -301,10 +293,10 @@ public class Semantico implements Constants {
 
 	private void acao15() {
 		adiciona(".assembly extern mscorlib{}");
-		adiciona(".assembly " + getFileName() + "{}");
-		adiciona(".module " + getFileName() + ".exe");
+		adiciona(".assembly " + NOME_PROGRAMA + "{}");
+		adiciona(".module " + NOME_PROGRAMA + ".exe");
 		adiciona("");
-		adiciona(".class public " + getFileName() + " {");
+		adiciona(".class public " + NOME_PROGRAMA + " {");
 		adiciona("  .method public static void _principal ()");
 		adiciona("  {");
 		adiciona("     .entrypoint");

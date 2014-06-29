@@ -10,10 +10,10 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -35,15 +35,15 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import comum.Classes;
-import comum.Token;
-
+import lexico.LexicalError;
+import lexico.Lexico;
 import semantico.SemanticError;
 import semantico.Semantico;
 import sintatico.Sintatico;
 import sintatico.SyntaticError;
-import lexico.LexicalError;
-import lexico.Lexico;
+
+import comum.Classes;
+import comum.Token;
 
 /**
  * @author Ailsson L. Hafemann
@@ -54,6 +54,9 @@ import lexico.Lexico;
 public class FrmCompilador extends JFrame {	
 	
 	private String				nomeArquivo	= "";
+	private boolean compilado = false;
+	private Semantico semantico;
+	
 	private JTextArea			taEditor;
 	private JScrollPane			spMensagens;
 	private JTextArea			taMensagens;
@@ -151,7 +154,7 @@ public class FrmCompilador extends JFrame {
 			
 			@Override
 			public void actionPerformed(final ActionEvent arg0) {
-				compilar();
+				compilar(true);
 			}
 		};
 		
@@ -159,7 +162,12 @@ public class FrmCompilador extends JFrame {
 			
 			@Override
 			public void actionPerformed(final ActionEvent arg0) {
-				gerarCodigo();
+				try {
+					gerarCodigo();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		};
 		
@@ -315,6 +323,7 @@ public class FrmCompilador extends JFrame {
 		taEditor.setText("");
 		taMensagens.setText("");
 		nomeArquivo = "";
+		compilado = false;
 		atualizaStatusBar(false);
 	}
 	
@@ -323,6 +332,7 @@ public class FrmCompilador extends JFrame {
 		if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			nomeArquivo = file.getAbsolutePath();
+			compilado = false;
 			
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			try {
@@ -370,21 +380,26 @@ public class FrmCompilador extends JFrame {
 	
 	private void recortar() {
 		taEditor.cut();
-	}
+	}				
 	
-	private void compilar() {
+	private boolean compilar(boolean build) {
+		if (compilado && !build) {
+			return true;
+		}
+		
 		taMensagens.setText("");
 		if (taEditor.getText().trim().isEmpty()) {
 			imprimirMensagem("nenhum programa para compilar");
+			compilado = false;
 		} else {
 			Lexico lexico = new Lexico();
 			Sintatico sintatico = new Sintatico();
-			Semantico semantico = new Semantico(nomeArquivo.equals("") ? "untitled" : new File(nomeArquivo).getName());
+			semantico = new Semantico();
 			lexico.setInput(taEditor.getText());
 			try {
 				sintatico.parse(lexico, semantico);
-			    imprimirMensagem("programa compilado com sucesso");
-			    imprimirMensagem(semantico.getCodigo());
+			    imprimirMensagem("programa compilado com sucesso"); 
+			    compilado = true;
 			} catch (LexicalError | SyntaticError | SemanticError e) {
 				String mensagem = "Erro na linha " + e.getLine() + " - ";
 				if ((e instanceof LexicalError) && (((LexicalError) e).getState() == 0)) {
@@ -393,8 +408,11 @@ public class FrmCompilador extends JFrame {
 				
 				mensagem += e.getMessage();
 			    imprimirMensagem(mensagem);
+			    compilado = false;
 			}
 		}
+		
+		return compilado;
 	}
 	
 	private String formatMessage(String line, String clazz, String lexeme) {
@@ -419,8 +437,22 @@ public class FrmCompilador extends JFrame {
 		return formatMessage(String.valueOf(t.getLine()), Classes.get(t.getId()), t.getLexeme());
 	}
 
-	private void gerarCodigo() {
-		imprimirMensagem("Geração de código ainda não foi implementado");
+	private void gerarCodigo() throws IOException {
+		compilar(false);		
+		if (compilado) {			
+			if (nomeArquivo.isEmpty()) {
+				salvar();
+			}
+			
+			if (!nomeArquivo.isEmpty()) { // se o arquivo foi salvo
+				taMensagens.setText("");
+				File fileIL = new File(nomeArquivo.substring(0, nomeArquivo.lastIndexOf(".")) + ".il");
+				FileOutputStream fis = new FileOutputStream(fileIL);
+				fis.write(semantico.getCodigo(nomeArquivo.substring(nomeArquivo.lastIndexOf("\\") + 1, nomeArquivo.length()).split("\\.")[0]).getBytes());
+				fis.close();
+				imprimirMensagem("Código objeto gerado com sucesso.");
+			}
+		}		
 	}	
 	
 	private void equipe() {
@@ -429,11 +461,11 @@ public class FrmCompilador extends JFrame {
 	
 	private void imprimirMensagem(String mensagem) {			
 		taMensagens.insert(mensagem + "\n", taMensagens.getCaretPosition());
-		//taMensagens.setCaretPosition(0); //posiciona na primeira linha
 	}
 	
 	private void atualizaStatusBar(boolean modificado) {
-		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Não modificado"));		
+		lblStatusbar.setText((nomeArquivo.isEmpty() ? "" : nomeArquivo + ": ") + (modificado ? "Modificado" : "Não modificado"));
+		compilado = compilado && !modificado;
 	}	
 	
 }
