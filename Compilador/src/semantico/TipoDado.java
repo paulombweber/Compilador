@@ -2,7 +2,7 @@ package semantico;
 
 public enum TipoDado {
 
-	INTEGER("int"), 
+	INTEGER("integer"), 
 	FLOAT("float"), 
 	BOOLEAN("boolean"), 
 	STRING("string");

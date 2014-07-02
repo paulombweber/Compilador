@@ -144,7 +144,8 @@ public class Lexico implements Constants
     		}
     		
     		position--;
-    		return input.charAt(position - 1);
+    		char c = input.charAt(position - 1);
+    		return (c == '\r') ? '\n' : c;
     	} else {
     		return (char) -1;
     	}
@@ -160,11 +161,11 @@ public class Lexico implements Constants
     			endColumnsLinePostion.push(column);
     			column = 1;
     		} else {
-    			column++;
+    			column++;    			
     		}
         	
     		position++;
-        	return c;        	
+        	return (c == '\r') ? '\n' : c;        	
         }
         else
             return (char) -1;

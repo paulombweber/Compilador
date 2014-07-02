@@ -174,7 +174,6 @@ public class Semantico implements Constants {
 			return CMD_VAR_STRING;
 		}
 		return null;
-
 	}
 
 	private void acao01() {
@@ -379,8 +378,9 @@ public class Semantico implements Constants {
 	}
 
 	private void acao25(Token token) {
-		adiciona(token.getLexeme());
-		ids.add(token.getLexeme());
+		if (!ids.contains(token.getLexeme())) {
+			ids.add(token.getLexeme());
+		}
 	}
 
 	private void acao26() throws SemanticError {
@@ -388,14 +388,16 @@ public class Semantico implements Constants {
 			if (!variaveis.containsKey(id)) {
 				variaveis.put(id, new Variavel(tipoTemp, id));
 			} else {
-				throw new SemanticError("Identificado " + id
-						+ " foi redeclarado.");
+				throw new SemanticError("Identificador (" + id
+						+ ") foi redeclarado.");
 			}
 
 			String xMsg = "";
 			xMsg = retornaTipo(tipoTemp);
 			adiciona(".locals (" + xMsg + " " + id + ")");
 		}
+		
+		ids.clear();
 		tipoTemp = null;
 	}
 
@@ -415,16 +417,30 @@ public class Semantico implements Constants {
 		 */
 		for (String id : ids) {
 			if (!variaveis.containsKey(id)) {
-				throw new SemanticError("Identificado " + id
-						+ " foi redeclarado.");
+				throw new SemanticError("Identificador (" + id
+						+ ") não declarado.");
 			}
 			String tipo = retornaTipo(variaveis.get(id).getTipo());
-			adiciona("Call string [mscolorlib]System.Console::ReadLine()");
+			adiciona("call string [mscorlib]System.Console::ReadLine()");			
 			if(tipo != "string"){
-				adiciona("Call "+ tipo +" [mscolorlib]System."+ tipo +"::Parse(string)");	
+				String lib;
+				switch (variaveis.get(id).getTipo()) {
+					case INTEGER:
+						lib = "Int64";
+						break;
+					case FLOAT:
+						lib = "Double";
+						break;
+					default:
+						lib = tipo;
+				}		
+				
+				adiciona("call "+ tipo +" [mscorlib]System."+ lib +"::Parse(string)");	
 			}
 			adiciona("stloc " + id);
 		}
+		
+		ids.clear();
 	}
 
 	private void acao28(Token token) throws SemanticError {
@@ -443,7 +459,6 @@ public class Semantico implements Constants {
 			throw new SemanticError("Identificado " + id
 					+ " foi redeclarado.");
 		}
-		String tipo = retornaTipo(variaveis.get(id).getTipo());
 		pilha.push(variaveis.get(id).getTipo());
 		adiciona("ldloc " + id);
 		
