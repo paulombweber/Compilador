@@ -19,7 +19,7 @@ public enum TipoDado {
 
 	public static TipoDado fromString(String id) {
 		for (TipoDado tipo : TipoDado.values()) {
-			if (tipo.getId().equals(id)) {
+			if (tipo.getId().equalsIgnoreCase(id)) {
 				return tipo;
 			}
 		}

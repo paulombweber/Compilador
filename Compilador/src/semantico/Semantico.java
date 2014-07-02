@@ -137,7 +137,7 @@ public class Semantico implements Constants {
 				acao29();
 				break;
 			case 30:
-				acao30();
+				acao30(token);
 				break;
 			case 31:
 				acao31();
@@ -399,9 +399,6 @@ public class Semantico implements Constants {
 			xMsg = retornaTipo(tipoTemp);
 			adiciona(".locals (" + xMsg + " " + id + ")");
 		}
-		
-		ids.clear();
-		tipoTemp = null;
 	}
 
 	private void acao27() throws SemanticError {
@@ -443,7 +440,6 @@ public class Semantico implements Constants {
 			adiciona("stloc " + id);
 		}
 		
-		ids.clear();
 	}
 
 	private void acao28(Token token) throws SemanticError {
@@ -500,8 +496,56 @@ public class Semantico implements Constants {
 		}
 	}
 
-	private void acao30() {
-		// TODO
+	private void acao30(Token token) throws SemanticError {
+		TipoDado tipo1 = tipoTemp;
+		int idTipo = token.getId();
+		if (tipo1 == TipoDado.INTEGER) {
+			if (idTipo == 3) {//Integer
+				for (String id : ids) {
+					adiciona("idc.i8 " + token.getLexeme());
+					adiciona("stloc " + id);
+				}
+			} else
+				throw new SemanticError("Tipo incompativel ");
+		} else {
+			if (tipo1 == TipoDado.FLOAT) {
+				if (idTipo == 4) {//Float
+					for (String id : ids) {
+						adiciona("idc.r8 " + token.getLexeme());
+						adiciona("stloc " + id);
+					}
+				} else
+					throw new SemanticError("Tipo incompativel");
+			} else {
+				if (tipo1 == TipoDado.STRING) {
+					if (idTipo == 5) {//String
+						for (String id : ids) {
+							adiciona("ldstr " + token.getLexeme());
+							adiciona("stloc " + id);
+						}
+					} else
+						throw new SemanticError("Tipo incompativel");
+				}else {
+					if (tipo1 == TipoDado.BOOLEAN) {
+						if (idTipo == 37) {//True
+							for (String id : ids) {
+								adiciona("idc.r8 1");
+								adiciona("stloc " + id);
+							}
+						}	
+							if (idTipo == 28) {//False
+								for (String id : ids) {
+									adiciona("idc.i8 0 ");
+									adiciona("stloc " + id);
+								}
+							}
+						} else
+							throw new SemanticError("Tipo incompativel");
+				}
+			}
+		}
+		ids.clear();
+		tipoTemp = null;
 	}
 
 	private void acao31() throws SemanticError {
