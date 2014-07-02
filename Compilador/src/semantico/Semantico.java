@@ -17,6 +17,7 @@ public class Semantico implements Constants {
 	private List<String> ids = new ArrayList<>();
 	private Map<String, Variavel> variaveis = new HashMap<>();
 	private TipoDado tipoTemp;
+	private Stack<String> ifs = new Stack<>();
 
 	private static final String CMD_ADD = "add";
 	private static final String CMD_SUB = "sub";
@@ -42,6 +43,8 @@ public class Semantico implements Constants {
 	private static final String CMD_VAR_FLOAT = "float64";
 	private static final String CMD_VAR_BOOL = "bool";
 	private static final String CMD_VAR_STRING = "string";
+	private static final String CMD_BRFALSE = "brfalse ";
+	private static final String CMD_BR = "br ";	
 
 	private static final String NOME_PROGRAMA = "<#NOME_PROGRAMA#>";
 	
@@ -501,16 +504,28 @@ public class Semantico implements Constants {
 		// TODO
 	}
 
-	private void acao31() {
-		// TODO
+	private void acao31() throws SemanticError {
+		TipoDado tipo = pilha.pop();
+		if (tipo != TipoDado.BOOLEAN){
+			throw new SemanticError("Tipo incompativel, esperado: " + TipoDado.BOOLEAN + ", encontrado: " + tipo);
+		}
+		int first = ifs.size() * 2 + 1;
+		String label1 = "L" + first;
+		String label2 = "L" + first++;
+		ifs.push(label1);
+		ifs.push(label2);
+		adiciona(CMD_BRFALSE + label1);
 	}
 	
 	private void acao32() {
-		// TODO
+		String label = ifs.pop();
+		adiciona(label + ": ");
 	}
 	
 	private void acao33() {
-		// TODO
+		String label = ifs.pop();
+		adiciona(CMD_BR + label);
+		adiciona(label + ": ");
 	}
 	
 	private void acao34() {
