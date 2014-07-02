@@ -16,13 +16,13 @@ public class SyntaticalMessageTest {
 	
 	private static Lexico		lexico;
 	private static Sintatico	sintatico;
-	private static Semantico	semantico;
+	private static Semantico 	semantico;
 	
 	@BeforeClass
 	public static void beforeClass() {
 		lexico = new Lexico();
 		sintatico = new Sintatico();
-		semantico = new Semantico();
+		semantico = new MockSemantico();
 	}
 	
 	@Test
@@ -87,6 +87,19 @@ public class SyntaticalMessageTest {
 	public void testScan() {
 		String program = "main print (\"digite um valor inteiro:\"); scan lado); area = lado * lado; println (area); end";
 		executeAnalysis(program, "Era esperado \"(\", encontrado: identificador (lado)");
+	}
+	
+	@Test
+	public void test01() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append(" global integer area; ");
+		builder.append(" ");
+		builder.append(" scan lado ); ");
+		builder.append(" area = lado * lado ; ");
+		builder.append(" println ( area ); ");
+		builder.append("end ");
+		executeAnalysis(builder.toString(), "Era esperado \"(\", encontrado: identificador (lado)");				
 	}
 	
 	private void executeAnalysis(final String program, final String message){
