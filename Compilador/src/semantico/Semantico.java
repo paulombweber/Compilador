@@ -248,7 +248,7 @@ public class Semantico implements Constants {
 	private void acao06(Token token) {
 		pilha.push(TipoDado.FLOAT);
 
-		adiciona(CMD_FLOAT + token.getLexeme());
+		adiciona(CMD_FLOAT + token.getLexeme().replace(',', '.'));
 	}
 
 	private void acao07() throws SemanticError {

@@ -66,8 +66,14 @@ public class SemanticTest {
 		return exeFile;
 	}
 	
-	private Process executar(File executavel) throws IOException {
-		return Runtime.getRuntime().exec(executavel.getCanonicalPath());		
+	private Process executar(File executavel) throws IOException, InterruptedException {
+		Process processo = Runtime.getRuntime().exec(executavel.getCanonicalPath());
+		Thread.sleep(1000);
+		return processo;
+	}
+	
+	private void assertSaida(String saida, String teste) {
+		Assert.assertTrue("Inicio da saída esperada: " + teste + "\nSaída encontrada: " + saida, saida.startsWith(teste));
 	}
 	
 	@Test
@@ -208,7 +214,7 @@ public class SemanticTest {
 			byte[] bytes = new byte[1024];
 			in.read(bytes);
 			String saida = new String(bytes);
-			Assert.assertTrue(saida.startsWith("trueend"));
+			assertSaida(saida, "trueend");
 		} finally {
 			processo.destroy();
 		}
@@ -264,7 +270,7 @@ public class SemanticTest {
 			byte[] bytes = new byte[1024];
 			in.read(bytes);
 			String saida = new String(bytes);
-			Assert.assertTrue(saida.startsWith("trueend"));
+			assertSaida(saida, "trueend");
 		} finally {
 			processo.destroy();
 		}
@@ -293,6 +299,39 @@ public class SemanticTest {
 			in.read(bytes);
 			String saida = new String(bytes);
 			Assert.assertTrue(saida.startsWith("falseend"));
+		} finally {
+			processo.destroy();
+		}
+	}
+	
+	@Test
+	public void test09() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append("println ( 1, 2, 3,5, \"a\", \"abc\" ); ");
+		builder.append("print ( 1,5 + 1,5 ); ");
+		builder.append("print ( \" \", 1,5 + 2 ); ");
+		builder.append("end");
+		
+		String nome = "test09";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, "123,5aabc\n3 3,5");
 		} finally {
 			processo.destroy();
 		}
