@@ -11,7 +11,9 @@ import lexico.LexicalError;
 import lexico.Lexico;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import semantico.SemanticError;
 import semantico.Semantico;
@@ -19,6 +21,9 @@ import sintatico.Sintatico;
 import sintatico.SyntaticError;
 
 public class SemanticTest {
+	
+	@Rule 
+	public ExpectedException expected = ExpectedException.none();	
 	
 	private Semantico compilar(String codigo) throws LexicalError, SyntaticError, SemanticError {
 		Lexico lexico = new Lexico();
@@ -166,6 +171,23 @@ public class SemanticTest {
 			processo.destroy();
 		}
 	}		
+	
+	@Test
+	public void test04() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		expected.expect(SemanticError.class);
+		expected.expectMessage("Identificador (lado) não declarado.");
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append(" global integer area; ");
+		builder.append(" ");
+		builder.append(" scan ( lado ); ");
+		builder.append(" area = lado * lado ; ");
+		builder.append(" println ( area ); ");
+		builder.append("end");
+		
+		compilar(builder.toString());
+	}
 	
 
 }
