@@ -185,5 +185,118 @@ public class SemanticTest {
 		compilar(builder.toString());
 	}
 	
+	@Test
+	public void test05() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append("if ( 1 > 0 ) ");
+		builder.append("print ( \"true\" ); ");
+		builder.append("else ");
+		builder.append("print (\"false\"); ");
+		builder.append("end; ");
+		builder.append("print ( \"end\" ); ");
+		builder.append("end");
+		
+		String nome = "test05";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();
+			byte[] bytes = new byte[1024];
+			in.read(bytes);
+			String saida = new String(bytes);
+			Assert.assertTrue(saida.startsWith("trueend"));
+		} finally {
+			processo.destroy();
+		}
+	}
+	
+	@Test
+	public void test06() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append("if ( 1 > 2 ) ");
+		builder.append("print ( \"true\" ); ");
+		builder.append("else ");
+		builder.append("print (\"false\"); ");
+		builder.append("end; ");
+		builder.append("print ( \"end\" ); ");
+		builder.append("end");
+		
+		String nome = "test06";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();
+			byte[] bytes = new byte[1024];
+			in.read(bytes);
+			String saida = new String(bytes);
+			Assert.assertTrue(saida.startsWith("falseend"));
+		} finally {
+			processo.destroy();
+		}
+	}		
+	
+	@Test
+	public void test07() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append("if ( 1 > 0 ) ");
+		builder.append("print ( \"true\" ); ");
+		builder.append("end; ");
+		builder.append("print ( \"end\" ); ");
+		builder.append("end");
+		
+		String nome = "test07";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();
+			byte[] bytes = new byte[1024];
+			in.read(bytes);
+			String saida = new String(bytes);
+			Assert.assertTrue(saida.startsWith("trueend"));
+		} finally {
+			processo.destroy();
+		}
+	}
+	
+	@Test
+	public void test08() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append("if ( 1 > 2 ) ");
+		builder.append("print ( \"true\" ); ");
+		builder.append("end; ");
+		builder.append("print ( \"false\" ); ");
+		builder.append("print ( \"end\" ); ");
+		builder.append("end");
+		
+		String nome = "test08";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();
+			byte[] bytes = new byte[1024];
+			in.read(bytes);
+			String saida = new String(bytes);
+			Assert.assertTrue(saida.startsWith("falseend"));
+		} finally {
+			processo.destroy();
+		}
+	}	
+	
 
 }
