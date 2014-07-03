@@ -554,11 +554,9 @@ public class Semantico implements Constants {
 			throw new SemanticError("Tipo incompativel, esperado: " + TipoDado.BOOLEAN + ", encontrado: " + tipo);
 		}
 		int first = ifs.size() * 2 + 1;
-		String label1 = "L" + first;
-		String label2 = "L" + first++;
-		ifs.push(label1);
+		String label2 = "L" + first;
 		ifs.push(label2);
-		adiciona(CMD_BRFALSE + label1);
+		adiciona(CMD_BRFALSE + label2);
 	}
 	
 	private void acao32() {
@@ -567,9 +565,11 @@ public class Semantico implements Constants {
 	}
 	
 	private void acao33() {
-		String label = ifs.pop();
-		adiciona(CMD_BR + label);
-		adiciona(label + ": ");
+		String label1 = ifs.pop();
+		String label2 = "L" + (label1.charAt(1) + 1);
+		ifs.push(label2);	
+		adiciona(CMD_BR + label2);
+		adiciona(label1 + ": ");
 	}
 	
 	private void acao34() {
