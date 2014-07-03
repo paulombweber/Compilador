@@ -105,15 +105,13 @@ public class SemanticTest {
 		StringBuilder builder = new StringBuilder();
 		builder.append("main ");
 		builder.append("global integer lado, area = 0; ");
+		builder.append("scan ( lado ); ");
 		builder.append("if ( lado > 1 ) ");
 		builder.append("area = lado * lado; ");
 		builder.append("print ( area ); ");
 		builder.append("else ");
 		builder.append("print (\"Valor inválido\"); ");
 		builder.append("end; ");
-		builder.append("scan ( lado ); ");
-		builder.append("area = lado * lado; ");
-		builder.append("println ( area ); ");
 		builder.append("end");
 		
 		String nome = "test02";
@@ -141,15 +139,13 @@ public class SemanticTest {
 		StringBuilder builder = new StringBuilder();
 		builder.append("main ");
 		builder.append("global integer lado, area = 0; ");
+		builder.append("scan ( lado ); ");
 		builder.append("if ( lado > 1 ) ");
 		builder.append("area = lado * lado; ");
 		builder.append("print ( area ); ");
 		builder.append("else ");
 		builder.append("print (\"Valor inválido\"); ");
 		builder.append("end; ");
-		builder.append("scan ( lado ); ");
-		builder.append("area = lado * lado; ");
-		builder.append("println ( area ); ");
 		builder.append("end");
 		
 		String nome = "test03";
