@@ -578,7 +578,7 @@ public class Semantico implements Constants {
 	
 	private void acao33() {
 		String rotulo1 = rotulos.pop();
-		String rotulo2 = "L" + ((Integer.valueOf(""+rotulo1.charAt(1))) + 1);
+		String rotulo2 = novoRotulo();
 		rotulos.push(rotulo2);	
 		adiciona(CMD_BR + rotulo2);
 		adiciona(rotulo1 + ": ", true);
@@ -603,7 +603,9 @@ public class Semantico implements Constants {
 	 * Formula mágica pra gerar os rotulos corretamente
 	 * @return
 	 */
+	private int labelIndex = 1;
+	
 	private String novoRotulo(){
-		return "L" + rotulos.size() * 2 + 1;
+		return "L" + labelIndex++;		
 	}
 }

@@ -346,6 +346,7 @@ public class SemanticTest {
 		builder.append("print (area); ");
 		builder.append("area = area + 1; ");
 		builder.append("while (area < 5); ");
+		builder.append("print (\"end\"); ");
 		builder.append("end");
 		
 		String nome = "test10";
@@ -366,11 +367,177 @@ public class SemanticTest {
 				Thread.sleep(1000);
 			}
 			
-			assertSaida(saida, "01234");
+			assertSaida(saida, "01234end");
 		} finally {
 			processo.destroy();
 		}
 	}
+	
+	@Test
+	public void test11() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append("global InTeGer area = 0; ");
+		builder.append("do ");
+		builder.append("print (area); ");
+		builder.append("area = area + 1; ");
+		builder.append("while (area < 0); ");
+		builder.append("print (\"end\"); ");
+		builder.append("end");
+		
+		String nome = "test11";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, "0end");
+		} finally {
+			processo.destroy();
+		}
+	}
+	
+	@Test
+	public void test12() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append("global integer area = 2; ");
+		builder.append("do ");
+		builder.append("print (area); ");
+		builder.append("area = area + 1; ");
+		builder.append("while (area < 0); ");
+		builder.append("print (\"end\"); ");
+		builder.append("end");
+		
+		String nome = "test12";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, "2end");
+		} finally {
+			processo.destroy();
+		}
+	}	
+	
+	@Test
+	public void test13() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main  ");
+		builder.append("  if (true) ");
+		builder.append("    print(\"true\"); ");
+		builder.append("  end; ");
+		builder.append("  ");
+		builder.append("  if (false) ");
+		builder.append("    print(\"false\"); ");
+		builder.append("  end; ");
+		builder.append("  ");
+		builder.append("  if (true) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");");
+		builder.append("  end;");
+		builder.append("    ");
+		builder.append("  if (false) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");  ");
+		builder.append("  end;");
+		builder.append("");
+		builder.append("  if (true && false) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");");
+		builder.append("  end;");
+		builder.append("	");
+		builder.append("  if (true && true) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");");
+		builder.append("  end;	");
+		builder.append("	");
+		builder.append("  if ((true && true) || false) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");	");
+		builder.append("  end;	");
+		builder.append("	");
+		builder.append("  if ((true && false) || false) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");		");
+		builder.append("  end;	");
+		builder.append("	");
+		builder.append("  if ((true && false) || true) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");		");
+		builder.append("  end;	");
+		builder.append("	");
+		builder.append("  if (true && true && false) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");	");
+		builder.append("  end;	");
+		builder.append("	");
+		builder.append("  if (true || (true && false)) ");
+		builder.append("    print(\"true\");");
+		builder.append("  else");
+		builder.append("    print(\"false\");");
+		builder.append("  end;");
+		builder.append("");
+		builder.append("  print(\"end\");  ");
+		builder.append("end 	");  	  	
+		
+		String nome = "test13";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, "truetruefalsefalsetruetruefalsetruefalsetrueend");
+		} finally {
+			processo.destroy();
+		}
+	}	
+	
 	
 
 }
