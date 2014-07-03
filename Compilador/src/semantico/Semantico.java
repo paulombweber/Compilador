@@ -17,7 +17,7 @@ public class Semantico implements Constants {
 	private List<String> ids = new ArrayList<>();
 	private Map<String, Variavel> variaveis = new HashMap<>();
 	private TipoDado tipoTemp;
-	private Stack<String> ifs = new Stack<>();
+	private Stack<String> rotulos = new Stack<>();
 
 	private static final String CMD_ADD = "add";
 	private static final String CMD_SUB = "sub";
@@ -44,6 +44,7 @@ public class Semantico implements Constants {
 	private static final String CMD_VAR_BOOL = "bool";
 	private static final String CMD_VAR_STRING = "string";
 	private static final String CMD_BRFALSE = "brfalse ";
+	private static final String CMD_BRTRUE = "brtrue ";
 	private static final String CMD_BR = "br ";	
 
 	private static final String NOME_PROGRAMA = "<#NOME_PROGRAMA#>";
@@ -561,30 +562,44 @@ public class Semantico implements Constants {
 		if (tipo != TipoDado.BOOLEAN){
 			throw new SemanticError("Tipo incompativel, esperado: " + TipoDado.BOOLEAN + ", encontrado: " + tipo);
 		}
-		int first = ifs.size() * 2 + 1;
-		String label2 = "L" + first;
-		ifs.push(label2);
-		adiciona(CMD_BRFALSE + label2);
+		String rotulo = novoRotulo();
+		rotulos.push(rotulo);
+		adiciona(CMD_BRFALSE + rotulo);
 	}
 	
 	private void acao32() {
-		String label = ifs.pop();
-		adiciona(label + ": ", true);
+		String rotulo = rotulos.pop();
+		adiciona(rotulo + ": ", true);
 	}
 	
 	private void acao33() {
-		String label1 = ifs.pop();
-		String label2 = "L" + ((Integer.valueOf(""+label1.charAt(1))) + 1);
-		ifs.push(label2);	
-		adiciona(CMD_BR + label2);
-		adiciona(label1 + ": ", true);
+		String rotulo1 = rotulos.pop();
+		String rotulo2 = "L" + ((Integer.valueOf(""+rotulo1.charAt(1))) + 1);
+		rotulos.push(rotulo2);	
+		adiciona(CMD_BR + rotulo2);
+		adiciona(rotulo1 + ": ", true);
 	}
 	
 	private void acao34() {
-		// TODO
+		String novoRotulo = novoRotulo();
+		rotulos.push(novoRotulo);
+		adiciona(novoRotulo + ": ", true);	
 	}
 	
-	private void acao35() {
-		// TODO
+	private void acao35() throws SemanticError {
+		TipoDado tipo = pilha.pop();
+		if (tipo != TipoDado.BOOLEAN){
+			throw new SemanticError("Tipo incompativel, esperado: " + TipoDado.BOOLEAN + ", encontrado: " + tipo);
+		}
+		String rotulo = rotulos.pop();
+		adiciona(CMD_BRTRUE + rotulo);
+	}
+	
+	/**
+	 * Formula mágica pra gerar os rotulos corretamente
+	 * @return
+	 */
+	private String novoRotulo(){
+		return "L" + rotulos.size() * 2 + 1;
 	}
 }
