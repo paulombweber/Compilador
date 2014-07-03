@@ -134,7 +134,7 @@ public class SemanticTest {
 			byte[] bytes = new byte[1024];
 			in.read(bytes);
 			String area = new String(bytes);
-			Assert.assertTrue(area.startsWith("5"));
+			assertSaida(area, "25");
 		} finally {
 			processo.destroy();
 		}
@@ -150,7 +150,7 @@ public class SemanticTest {
 		builder.append("area = lado * lado; ");
 		builder.append("print ( area ); ");
 		builder.append("else ");
-		builder.append("print (\"Valor inválido\"); ");
+		builder.append("print (\"Valor invalido\"); ");
 		builder.append("end; ");
 		builder.append("end");
 		
@@ -168,7 +168,7 @@ public class SemanticTest {
 			byte[] bytes = new byte[1024];
 			in.read(bytes);
 			String area = new String(bytes);
-			Assert.assertTrue(area.startsWith("Valor inválido"));
+			assertSaida(area, "Valor invalido");
 		} finally {
 			processo.destroy();
 		}
@@ -533,6 +533,127 @@ public class SemanticTest {
 			}
 			
 			assertSaida(saida, "truetruefalsefalsetruetruefalsetruefalsetrueend");
+		} finally {
+			processo.destroy();
+		}
+	}	
+	
+	@Test
+	public void test14() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder codigo = new StringBuilder();
+		StringBuilder esperado = new StringBuilder();
+		codigo.append("main  ");
+		codigo.append("if (2 == 2) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 != 2) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (2 > 2) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (2 >= 2) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 < 2) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (2 <= 2) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 == 3) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (2 != 3) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 > 3) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (2 >= 3) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (2 < 3) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 <= 3) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 == 1) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (2 != 1) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 > 1) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 >= 1) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (2 < 1) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (2 <= 1) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+		
+		codigo.append("end");  	  	
+		
+		String nome = "test14";
+		Semantico semantico = compilar(codigo.toString());
+		String codigoObjeto = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigoObjeto, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, esperado.toString());
+		} finally {
+			processo.destroy();
+		}
+	}
+	
+	@Test
+	public void test15() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder codigo = new StringBuilder();
+		StringBuilder esperado = new StringBuilder();
+		codigo.append("main  ");
+		codigo.append("if (2 > 2) print(\"true1\"); else if (2 > 2) print(\"true2\"); else if (2 == 2) print(\"true3\"); end; end; end; ");
+		esperado.append("true3");	
+		
+		codigo.append("if (2 > 1) print(\"true1\"); if (2 > 1) print(\"true2\"); if (2 > 2) print(\"true3\"); end; if (2 > 1) print(\"true4\"); end; end; end;");
+		esperado.append("true1true2true4");		
+		codigo.append("end");  	  	
+		
+		String nome = "test15";
+		Semantico semantico = compilar(codigo.toString());
+		String codigoObjeto = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigoObjeto, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, esperado.toString());
 		} finally {
 			processo.destroy();
 		}
