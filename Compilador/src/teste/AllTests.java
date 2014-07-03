@@ -6,7 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ LexicalMessageTest.class, SemanticTest.class,
-		SyntaticalMessageTest.class })
+		SyntaticalMessageTest.class ,SemanticAtribuicaoTest.class})
 public class AllTests {
 
 }

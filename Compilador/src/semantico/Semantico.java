@@ -190,6 +190,17 @@ public class Semantico implements Constants {
 		return null;
 	}
 	
+	private String retornaTipoToken(int id){
+		switch (id){
+		case 3: return "INTEGER";
+		case 4: return "FLOAT";
+		case 5: return "STRING";
+		case 37: return "TRUE";
+		case 28: return "FALSE";
+		default: return "";
+		}
+	}
+	
 	private String formatFloatValue(String value) {
 		return value.replace(',', '.');
 	}
@@ -530,7 +541,7 @@ public class Semantico implements Constants {
 					adiciona("stloc " + id);
 				}
 			} else
-				throw new SemanticError("Tipo incompativel ");
+				throw new SemanticError("Tipo incompativel: " + retornaTipoToken(idTipo) + " com " + tipo1.toString());
 		} else {
 			if (tipo1 == TipoDado.FLOAT) {
 				if (idTipo == 4) {//Float
@@ -539,7 +550,7 @@ public class Semantico implements Constants {
 						adiciona("stloc " + id);
 					}
 				} else
-					throw new SemanticError("Tipo incompativel");
+					throw new SemanticError("Tipo incompativel: " + retornaTipoToken(idTipo) + " com " + tipo1.toString());
 			} else {
 				if (tipo1 == TipoDado.STRING) {
 					if (idTipo == 5) {//String
