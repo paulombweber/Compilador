@@ -337,5 +337,40 @@ public class SemanticTest {
 		}
 	}	
 	
+	@Test
+	public void test10() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder builder = new StringBuilder();
+		builder.append("main ");
+		builder.append("global integer area = 0; ");
+		builder.append("do ");
+		builder.append("print (area); ");
+		builder.append("area = area + 1; ");
+		builder.append("while (area < 5); ");
+		builder.append("end");
+		
+		String nome = "test10";
+		Semantico semantico = compilar(builder.toString());
+		String codigo = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigo, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, "01234");
+		} finally {
+			processo.destroy();
+		}
+	}
+	
 
 }

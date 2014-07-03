@@ -187,6 +187,10 @@ public class Semantico implements Constants {
 		}
 		return null;
 	}
+	
+	private String formatFloatValue(String value) {
+		return value.replace(',', '.');
+	}
 
 	private void acao01() {
 		TipoDado tipo1 = pilha.pop();
@@ -248,7 +252,7 @@ public class Semantico implements Constants {
 	private void acao06(Token token) {
 		pilha.push(TipoDado.FLOAT);
 
-		adiciona(CMD_FLOAT + token.getLexeme().replace(',', '.'));
+		adiciona(CMD_FLOAT + formatFloatValue(token.getLexeme()));
 	}
 
 	private void acao07() throws SemanticError {
@@ -511,7 +515,7 @@ public class Semantico implements Constants {
 		if (tipo1 == TipoDado.INTEGER) {
 			if (idTipo == 3) {//Integer
 				for (String id : ids) {
-					adiciona("idc.i8 " + token.getLexeme());
+					adiciona("ldc.i8 " + token.getLexeme());
 					adiciona("stloc " + id);
 				}
 			} else
@@ -520,7 +524,7 @@ public class Semantico implements Constants {
 			if (tipo1 == TipoDado.FLOAT) {
 				if (idTipo == 4) {//Float
 					for (String id : ids) {
-						adiciona("idc.r8 " + token.getLexeme());
+						adiciona("ldc.r8 " + formatFloatValue(token.getLexeme()));
 						adiciona("stloc " + id);
 					}
 				} else
@@ -538,13 +542,13 @@ public class Semantico implements Constants {
 					if (tipo1 == TipoDado.BOOLEAN) {
 						if (idTipo == 37) {//True
 							for (String id : ids) {
-								adiciona("idc.r8 1");
+								adiciona("ldc.r8 1");
 								adiciona("stloc " + id);
 							}
 						}	
 							if (idTipo == 28) {//False
 								for (String id : ids) {
-									adiciona("idc.i8 0 ");
+									adiciona("ldc.i8 0 ");
 									adiciona("stloc " + id);
 								}
 							}
