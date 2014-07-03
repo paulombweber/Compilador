@@ -18,6 +18,8 @@ public class Semantico implements Constants {
 	private Map<String, Variavel> variaveis = new HashMap<>();
 	private TipoDado tipoTemp;
 	private Stack<String> rotulos = new Stack<>();
+	private List<String> idsAcao30 = new ArrayList<>();
+	private TipoDado tipoTempAcao30;
 
 	private static final String CMD_ADD = "add";
 	private static final String CMD_SUB = "sub";
@@ -400,6 +402,9 @@ public class Semantico implements Constants {
 	}
 
 	private void acao26() throws SemanticError {
+		if(!idsAcao30.isEmpty()){
+			idsAcao30.clear();
+		}
 		for (String id : ids) {
 			if (!variaveis.containsKey(id)) {
 				variaveis.put(id, new Variavel(tipoTemp, id));
@@ -411,7 +416,11 @@ public class Semantico implements Constants {
 			String xMsg = "";
 			xMsg = retornaTipo(tipoTemp);
 			adiciona(".locals (" + xMsg + " " + id + ")");
+			idsAcao30.add(id);
 		}
+		tipoTempAcao30 = tipoTemp;
+		ids.clear();
+		tipoTemp = null;
 	}
 
 	private void acao27() throws SemanticError {
@@ -452,6 +461,7 @@ public class Semantico implements Constants {
 			}
 			adiciona("stloc " + id);
 		}
+		ids.clear();
 		
 	}
 
@@ -507,14 +517,15 @@ public class Semantico implements Constants {
 			}
 			adiciona("stloc " + id);
 		}
+		ids.clear();
 	}
 
 	private void acao30(Token token) throws SemanticError {
-		TipoDado tipo1 = tipoTemp;
+		TipoDado tipo1 = tipoTempAcao30;
 		int idTipo = token.getId();
 		if (tipo1 == TipoDado.INTEGER) {
 			if (idTipo == 3) {//Integer
-				for (String id : ids) {
+				for (String id : idsAcao30) {
 					adiciona("ldc.i8 " + token.getLexeme());
 					adiciona("stloc " + id);
 				}
@@ -523,7 +534,7 @@ public class Semantico implements Constants {
 		} else {
 			if (tipo1 == TipoDado.FLOAT) {
 				if (idTipo == 4) {//Float
-					for (String id : ids) {
+					for (String id : idsAcao30) {
 						adiciona("ldc.r8 " + formatFloatValue(token.getLexeme()));
 						adiciona("stloc " + id);
 					}
@@ -532,7 +543,7 @@ public class Semantico implements Constants {
 			} else {
 				if (tipo1 == TipoDado.STRING) {
 					if (idTipo == 5) {//String
-						for (String id : ids) {
+						for (String id : idsAcao30) {
 							adiciona("ldstr " + token.getLexeme());
 							adiciona("stloc " + id);
 						}
@@ -541,13 +552,13 @@ public class Semantico implements Constants {
 				}else {
 					if (tipo1 == TipoDado.BOOLEAN) {
 						if (idTipo == 37) {//True
-							for (String id : ids) {
+							for (String id : idsAcao30) {
 								adiciona("ldc.r8 1");
 								adiciona("stloc " + id);
 							}
 						}	
 							if (idTipo == 28) {//False
-								for (String id : ids) {
+								for (String id : idsAcao30) {
 									adiciona("ldc.i8 0 ");
 									adiciona("stloc " + id);
 								}
@@ -557,8 +568,8 @@ public class Semantico implements Constants {
 				}
 			}
 		}
-		ids.clear();
-		tipoTemp = null;
+		idsAcao30.clear();
+		tipoTempAcao30 = null;
 	}
 
 	private void acao31() throws SemanticError {
