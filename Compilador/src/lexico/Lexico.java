@@ -116,7 +116,7 @@ public class Lexico implements Constants
         while (start <= end)
         {
             int half = (start+end)/2;
-            int comp = SPECIAL_CASES_KEYS[half].compareTo(key);
+            int comp = SPECIAL_CASES_KEYS[half].toUpperCase().compareTo(key.toUpperCase());
 
             if (comp == 0)
                 return SPECIAL_CASES_VALUES[half];
