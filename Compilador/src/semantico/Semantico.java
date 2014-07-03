@@ -162,7 +162,15 @@ public class Semantico implements Constants {
 	}
 
 	private void adiciona(String comando) {
-		codigo.append(comando + "\n");
+		adiciona(comando, false);
+	}
+	
+	private void adiciona(String comando, boolean isLabel) {
+		String append = comando;
+		if(!isLabel){
+			append += " \n";
+		}
+		codigo.append(append);
 	}
 	
 	private String retornaTipo(TipoDado tipo){
@@ -305,7 +313,7 @@ public class Semantico implements Constants {
 	}
 
 	private void acao16() {
-		adiciona("     ret");
+		adiciona("ret");
 		adiciona("  }");
 		adiciona("}");
 	}
@@ -561,15 +569,15 @@ public class Semantico implements Constants {
 	
 	private void acao32() {
 		String label = ifs.pop();
-		adiciona(label + ": ");
+		adiciona(label + ": ", true);
 	}
 	
 	private void acao33() {
 		String label1 = ifs.pop();
-		String label2 = "L" + (label1.charAt(1) + 1);
+		String label2 = "L" + ((Integer.valueOf(""+label1.charAt(1))) + 1);
 		ifs.push(label2);	
 		adiciona(CMD_BR + label2);
-		adiciona(label1 + ": ");
+		adiciona(label1 + ": ", true);
 	}
 	
 	private void acao34() {
