@@ -597,6 +597,9 @@ public class SemanticTest {
 		codigo.append("if (2 <= 1) print(\"true\"); else print(\"false\"); end; ");
 		esperado.append("false");
 		
+		codigo.append("print(\"end\"); ");
+		esperado.append("end");
+		
 		codigo.append("end");  	  	
 		
 		String nome = "test14";
@@ -658,6 +661,39 @@ public class SemanticTest {
 			processo.destroy();
 		}
 	}	
+	
+	@Test
+	public void test16() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder codigo = new StringBuilder();
+		StringBuilder esperado = new StringBuilder();
+		codigo.append("main  ");
+		codigo.append("if (2 > 2) print(\"true1\"); else if (2 > 2) print(\"true2\"); end; end;  print(\"end\");");
+		esperado.append("end");		
+		codigo.append("end");  	  	
+		
+		String nome = "test16";
+		Semantico semantico = compilar(codigo.toString());
+		String codigoObjeto = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigoObjeto, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, esperado.toString());
+		} finally {
+			processo.destroy();
+		}
+	}		
 	
 	
 
