@@ -545,9 +545,15 @@ public class SemanticTest {
 		codigo.append("main  ");
 		codigo.append("if (2 == 2) print(\"true\"); else print(\"false\"); end; ");
 		esperado.append("true");
+		
+		codigo.append("if (!(2 == 2)) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");		
 
 		codigo.append("if (2 != 2) print(\"true\"); else print(\"false\"); end; ");
 		esperado.append("false");
+		
+		codigo.append("if (!(2 != 2)) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");			
 
 		codigo.append("if (2 > 2) print(\"true\"); else print(\"false\"); end; ");
 		esperado.append("false");
@@ -694,6 +700,64 @@ public class SemanticTest {
 			processo.destroy();
 		}
 	}		
+	
+	@Test
+	public void test17() throws LexicalError, SyntaticError, SemanticError, IOException, InterruptedException {
+		StringBuilder codigo = new StringBuilder();
+		StringBuilder esperado = new StringBuilder();
+		codigo.append("main  ");
+		codigo.append("global string str = \"abc\";");
+		codigo.append("global string str2 = \"abc\";");
+		codigo.append("global string str3 = \"abC\";");
+
+		codigo.append("if (str == \"abc\") print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (str == \"aBc\") print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (str != \"abc\") print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (str != \"aBc\") print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (str == str2) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+
+		codigo.append("if (str != str2) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (str == str3) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("false");
+
+		codigo.append("if (str != str3) print(\"true\"); else print(\"false\"); end; ");
+		esperado.append("true");
+		codigo.append("end");  	  	
+		
+		String nome = "test17";
+		Semantico semantico = compilar(codigo.toString());
+		String codigoObjeto = gerarCodigoObjeto(semantico, nome);
+		File dir = new File(".");
+		File exe = gerarExecutavel(dir, codigoObjeto, nome);
+		Process processo = executar(exe);
+		try {
+			InputStream in = processo.getInputStream();			
+			byte[] bytes = new byte[1024];
+			String saida = "";
+			Thread.sleep(5000);
+			
+			while (in.read(bytes) > 0) {				
+				saida += new String(bytes);
+				bytes = new byte[1024];
+				Thread.sleep(1000);
+			}
+			
+			assertSaida(saida, esperado.toString());
+		} finally {
+			processo.destroy();
+		}
+	}	
 	
 	
 
